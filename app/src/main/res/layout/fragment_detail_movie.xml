@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.udacity.porfolioapp.fragment.DetailMovieFragment">
+
+   <ImageView
+       android:id="@+id/ivDetailMovie"
+       android:src="@drawable/logo_android"
+       android:layout_width="match_parent"
+       android:adjustViewBounds="true"
+       android:scaleType="centerCrop"
+       android:layout_alignParentTop="true"
+       android:layout_height="200dp" />
+
+    <TextView
+        android:layout_below="@+id/ivDetailMovie"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tvSummaryMovie"
+        android:textColor="@color/blue_grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_below="@+id/tvSummaryMovie"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tvYearMovie"
+        android:textColor="@color/blue_grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_below="@+id/tvYearMovie"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/blue_grey"
+        android:id="@+id/tvDurationMovie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/tvDurationMovie"
+        android:layout_marginTop="10dp"
+        android:id="@+id/rvTrailer"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
