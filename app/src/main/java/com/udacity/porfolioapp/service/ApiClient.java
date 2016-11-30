@@ -1,7 +1,5 @@
 package com.udacity.porfolioapp.service;
 
-import android.util.Log;
-
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -28,7 +26,7 @@ public class ApiClient {
          OkHttpClient httpClient = new OkHttpClient();
          //httpClient.setConnectTimeout(20, TimeUnit.SECONDS);
          //httpClient.setReadTimeout(30, TimeUnit.SECONDS);
-         Log.i(TAG_API,"GET CUSTOM OK HTTP CLIENT");
+        // Log.i(TAG_API,"GET CUSTOM OK HTTP CLIENT");
         return httpClient;
     }
     
