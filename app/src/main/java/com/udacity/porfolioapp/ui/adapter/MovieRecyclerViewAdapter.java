@@ -28,7 +28,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieViewHold
     private Context context;
     private List<Movie> movieList;
     private Context listMoviesFragment;
-
+    private final static String baseUrlImage="http://image.tmdb.org/t/p/w300";
     public MovieRecyclerViewAdapter(Context listMoviesFragment, List<Movie> movieList) {
         this.movieList = movieList;
         this.listMoviesFragment = listMoviesFragment;
@@ -53,7 +53,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieViewHold
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         holder.tvNameMovie.setText(movieList.get(position).getNameMovie());
 
-        Glide.with(context).load(movieList.get(position).getUrlMovie()).placeholder(R.drawable.placeholder).crossFade().into( holder.ivImageMovie);
+        Glide.with(context).load(baseUrlImage+movieList.get(position).getUrlMovie()).placeholder(R.drawable.placeholder).crossFade().into( holder.ivImageMovie);
     }
 
     @Override

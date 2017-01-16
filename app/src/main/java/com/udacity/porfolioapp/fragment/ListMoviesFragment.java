@@ -3,20 +3,25 @@ package com.udacity.porfolioapp.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.udacity.porfolioapp.OnMovieClickListener;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.model.ListMovie;
 import com.udacity.porfolioapp.model.Movie;
+import com.udacity.porfolioapp.service.ApiClient;
 import com.udacity.porfolioapp.service.MovieRestAPI;
 import com.udacity.porfolioapp.ui.adapter.MovieRecyclerViewAdapter;
 
@@ -35,7 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,OnMovieClickListener {
+public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,OnMovieClickListener,View.OnClickListener {
 
     // TODO: Customize parameter argument names
     public static final String ARG_COLUMN_COUNT = "column-count";
@@ -48,7 +53,11 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
     private int mColumnCount = 2;
     private OnListFragmentInteractionListener mListener;
     private MovieRecyclerViewAdapter mrvAdapter;
+    private final static String API_KEY = "b3420c7e4ccc91fd03c3cd0ff60d9a92";
 
+    private Boolean isFabOpen = false;
+    private FloatingActionButton fab,fab1,fab2;
+    private Animation fab_open,fab_close,rotate_forward,rotate_backward;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -76,13 +85,49 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
             mColumnCount=2;
         }
     }
+    public void animateFAB(){
 
+        if(isFabOpen){
+
+            fab.startAnimation(rotate_backward);
+            fab1.startAnimation(fab_close);
+            fab2.startAnimation(fab_close);
+            fab1.setClickable(false);
+            fab2.setClickable(false);
+            isFabOpen = false;
+            Log.d("Raj", "close");
+
+        } else {
+
+            fab.startAnimation(rotate_forward);
+            fab1.startAnimation(fab_open);
+            fab2.startAnimation(fab_open);
+            fab1.setClickable(true);
+            fab2.setClickable(true);
+            isFabOpen = true;
+            Log.d("Raj","open");
+
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listmovies_list, container, false);
 
         Context context = view.getContext();
+
+        fab = (FloatingActionButton)view.findViewById(R.id.fab);
+        fab1 = (FloatingActionButton)view.findViewById(R.id.fab1);
+        fab2 = (FloatingActionButton)view.findViewById(R.id.fab2);
+        fab_open = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.fab_close);
+        rotate_forward = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.rotate_backward);
+        fab.setOnClickListener(this);
+        fab1.setOnClickListener(this);
+        fab2.setOnClickListener(this);
+
+
         rvMovies= (RecyclerView) view.findViewById(R.id.rvMovies);
         if (mColumnCount <= 1) {
             rvMovies.setLayoutManager(new LinearLayoutManager(context));
@@ -90,10 +135,7 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
             rvMovies.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
 
-        retrofit = new Retrofit.Builder()
-                    .baseUrl("https://waspiest-assignment.000webhostapp.com")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+
 
         listMovies=new ArrayList<>();
 
@@ -106,81 +148,25 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
                 @Override
                 public void onRefresh() {
                     rvMovies.setVisibility(View.GONE);
-                    MovieRestAPI stackOverflowAPI = retrofit.create(MovieRestAPI.class);
-                    Call<ListMovie> call = stackOverflowAPI.loadMovies();
+                    MovieRestAPI apiService =
+                            ApiClient.getClient().create(MovieRestAPI.class);
+
+                    Call<ListMovie> call = apiService.loadMovies();
                     call.enqueue(ListMoviesFragment.this);
                 }
             });
         swipeContainer.setRefreshing(true);
-        MovieRestAPI stackOverflowAPI = retrofit.create(MovieRestAPI.class);
-        Call<ListMovie> call = stackOverflowAPI.loadMovies();
+
+
+
+        MovieRestAPI apiService =
+                ApiClient.getClient().create(MovieRestAPI.class);
+
+        Call<ListMovie> call = apiService.loadAllMovies(API_KEY);
         call.enqueue(ListMoviesFragment.this);
 
-        /*
-        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.setter);
-        button.setSize(FloatingActionButton.SIZE_MINI);
-        button.setColorNormalResId(R.color.pink);
-        button.setColorPressedResId(R.color.pink_pressed);
-        button.setIcon(R.drawable.ic_fab_star);
-        button.setStrokeVisible(false);
 
-        final View actionB = findViewById(R.id.action_b);
 
-        FloatingActionButton actionC = new FloatingActionButton(getBaseContext());
-        actionC.setTitle("Hide/Show Action above");
-        actionC.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actionB.setVisibility(actionB.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-            }
-        });
-
-        final FloatingActionsMenu menuMultipleActions = (FloatingActionsMenu)view.findViewById(R.id.multiple_actions);
-        menuMultipleActions.addButton(actionC);
-
-        final FloatingActionButton removeAction = (FloatingActionButton) findViewById(R.id.button_remove);
-        removeAction.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((FloatingActionsMenu) findViewById(R.id.multiple_actions_down)).removeButton(removeAction);
-            }
-        });
-
-        ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
-        drawable.getPaint().setColor(getResources().getColor(R.color.white));
-        ((FloatingActionButton) findViewById(R.id.setter_drawable)).setIconDrawable(drawable);
-
-        final FloatingActionButton actionA = (FloatingActionButton) findViewById(R.id.action_a);
-        actionA.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                actionA.setTitle("Action A clicked");
-            }
-        });
-
-        // Test that FAMs containing FABs with visibility GONE do not cause crashes
-        findViewById(R.id.button_gone).setVisibility(View.GONE);
-
-        final FloatingActionButton actionEnable = (FloatingActionButton) findViewById(R.id.action_enable);
-        actionEnable.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                menuMultipleActions.setEnabled(!menuMultipleActions.isEnabled());
-            }
-        });
-
-        FloatingActionsMenu rightLabels = (FloatingActionsMenu) findViewById(R.id.right_labels);
-        FloatingActionButton addedOnce = new FloatingActionButton(this);
-        addedOnce.setTitle("Added once");
-        rightLabels.addButton(addedOnce);
-
-        FloatingActionButton addedTwice = new FloatingActionButton(this);
-        addedTwice.setTitle("Added twice");
-        rightLabels.addButton(addedTwice);
-        rightLabels.removeButton(addedTwice);
-        rightLabels.addButton(addedTwice);
-
-        */
         return view;
     }
     @Override
@@ -242,6 +228,23 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
     @Override
     public void onMovieClick(int position) {
         mListener.onFragmentInteraction(Uri.parse(ListMoviesFragment.class.getSimpleName()),listMovies.get(position));
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id){
+            case R.id.fab:
+
+                animateFAB();
+                break;
+            case R.id.fab1:
+
+                break;
+            case R.id.fab2:
+
+                break;
+        }
     }
 
     /**

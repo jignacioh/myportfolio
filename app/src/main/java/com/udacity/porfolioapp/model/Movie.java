@@ -1,5 +1,7 @@
 package com.udacity.porfolioapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,13 +10,26 @@ import java.util.List;
  */
 
 public class Movie implements Serializable   {
+
+    @SerializedName("poster_path")
     private String urlMovie;
+    @SerializedName("original_title")
     private String nameMovie;
+    @SerializedName("release_date")
     private String yearMovie;
+    @SerializedName("id")
     private String durationMovie;
+    @SerializedName("backdrop_path")
     private String imageMovie;
+    @SerializedName("overview")
     private String descriptionMovie;
     private List<String> listTrailerMovie;
+
+    @SerializedName("vote_count")
+    private int voteCount;
+
+    @SerializedName("vote_average")
+    private Double voteAverage;
 
     public Movie() {
     }
@@ -26,6 +41,22 @@ public class Movie implements Serializable   {
         this.durationMovie = durationMovie;
         this.descriptionMovie = descriptionMovie;
         this.listTrailerMovie = listTrailerMovie;
+    }
+
+    public int getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 
     public String getImageMovie() {

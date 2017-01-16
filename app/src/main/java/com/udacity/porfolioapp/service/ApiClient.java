@@ -8,15 +8,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by jhurtace on 30/11/2016.
  */
 public class ApiClient {
-    public static final String TAG_API="API CLIENT";
-    public static final String BASE_URL = "https://waspiest-assignment.000webhostapp.com";
+    public static final String TAG_API="b3420c7e4ccc91fd03c3cd0ff60d9a92";
+    public static final String BASE_URL = "http://api.themoviedb.org/3/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .client(getRequestHeader())
+
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
