@@ -15,4 +15,6 @@
     <string name="lb_all">All</string>
     <string name="lb_popular">Most Popular</string>
     <string name="lb_rated">High Rated</string>
+
+    <string name="lb_title_general">Error</string>
 </resources>

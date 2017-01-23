@@ -20,7 +20,7 @@ public class ItemMovieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item_movie);
 
         // Show the Up button in the action bar.
-        Movie movie= (Movie) getIntent().getSerializableExtra(DetailMovieFragment.ARG_ITEM_MOVIE);
+        Movie movie= (Movie) getIntent().getParcelableExtra(DetailMovieFragment.ARG_ITEM_MOVIE);
         getSupportActionBar().setTitle(movie.getNameMovie());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -37,7 +37,7 @@ public class ItemMovieActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putSerializable(DetailMovieFragment.ARG_ITEM_MOVIE, getIntent().getSerializableExtra(DetailMovieFragment.ARG_ITEM_MOVIE));
+            arguments.putParcelable(DetailMovieFragment.ARG_ITEM_MOVIE, getIntent().getParcelableExtra(DetailMovieFragment.ARG_ITEM_MOVIE));
             DetailMovieFragment fragment = new DetailMovieFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container, fragment).commit();

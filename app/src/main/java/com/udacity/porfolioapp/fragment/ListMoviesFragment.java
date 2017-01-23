@@ -41,7 +41,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
 
     // TODO: Customize parameter argument names
     public static final String ARG_COLUMN_COUNT = "column-count";
-    public static final int TYPE_ALL_MOVIES= 1;
+    public static final int TYPE_POPULAR_MOVIES= R.id.fabPopular;
     private final static String API_KEY = "b3420c7e4ccc91fd03c3cd0ff60d9a92";
 
 
@@ -113,7 +113,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listmovies_list, container, false);
         apiService = ApiClient.getClient().create(MovieRestAPI.class);
-        idTypeSort=TYPE_ALL_MOVIES;
+        idTypeSort=TYPE_POPULAR_MOVIES;
         Context context = view.getContext();
 
         fab = (FloatingActionButton)view.findViewById(R.id.fab);
@@ -153,7 +153,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         swipeContainer.setRefreshing(true);
 
 
-        sortByPreference(TYPE_ALL_MOVIES);
+        sortByPreference(TYPE_POPULAR_MOVIES);
 
         return view;
     }
@@ -241,11 +241,6 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
             rvMovies.setVisibility(View.VISIBLE);
             llMessage.setVisibility(View.GONE);
             switch (idTypeSort) {
-                case TYPE_ALL_MOVIES:
-                    rvMovies.setVisibility(View.GONE);
-                    call = apiService.loadAllMovies(API_KEY);
-                    call.enqueue(ListMoviesFragment.this);
-                    break;
                 case R.id.fabPopular:
                     rvMovies.setVisibility(View.GONE);
                     call = apiService.loadHighRatedMovies(API_KEY);

@@ -2,9 +2,10 @@ package com.udacity.porfolioapp.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -16,7 +17,6 @@ import com.udacity.porfolioapp.fragment.ListMoviesFragment;
 import com.udacity.porfolioapp.model.ListMovie;
 import com.udacity.porfolioapp.model.Movie;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,6 @@ public class ListMoviesActivity extends AppCompatActivity implements Callback<Li
     private GridLayoutManager lLayout;
     private RecyclerView rvMovies;
     private SwipeRefreshLayout swipeContainer;
-
     private List<Movie> listMovies;
 
     private boolean mTwoPane=false;
@@ -39,7 +38,7 @@ public class ListMoviesActivity extends AppCompatActivity implements Callback<Li
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_movies);
         getSupportActionBar().setTitle(getResources().getString(R.string.lb_my_movies));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         if (findViewById(R.id.movie_detail_container) != null) {
             mTwoPane = true;
@@ -85,7 +84,7 @@ public class ListMoviesActivity extends AppCompatActivity implements Callback<Li
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putSerializable(DetailMovieFragment.ARG_ITEM_MOVIE, (Serializable) list.get(position));
+            arguments.putParcelable(DetailMovieFragment.ARG_ITEM_MOVIE, (Parcelable) list.get(position));
             DetailMovieFragment fragment = new DetailMovieFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, fragment).commit();
@@ -94,7 +93,7 @@ public class ListMoviesActivity extends AppCompatActivity implements Callback<Li
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, ItemMovieActivity.class);
-            detailIntent.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,(Serializable)list.get(position));
+            detailIntent.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,(Parcelable) list.get(position));
             startActivity(detailIntent);
         }
     }

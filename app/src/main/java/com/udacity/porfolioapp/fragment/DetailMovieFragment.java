@@ -46,7 +46,7 @@ public class DetailMovieFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_MOVIE)) {
-            movie = (Movie) getArguments().getSerializable(ARG_ITEM_MOVIE);
+            movie = (Movie) getArguments().getParcelable(ARG_ITEM_MOVIE);
         }
     }
 

@@ -1,15 +1,18 @@
 package com.udacity.porfolioapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by juan
  */
 
-public class Movie implements Serializable   {
+public class Movie implements Parcelable   {
 
     @SerializedName("poster_path")
     private String urlMovie;
@@ -115,4 +118,64 @@ public class Movie implements Serializable   {
     public void setListTrailerMovie(List<String> listTrailerMovie) {
         this.listTrailerMovie = listTrailerMovie;
     }
+
+
+    protected Movie(Parcel in) {
+        urlMovie = in.readString();
+        nameMovie = in.readString();
+        yearMovie = in.readString();
+        popularity = in.readString();
+        imageMovie = in.readString();
+        descriptionMovie = in.readString();
+        if (in.readByte() == 0x01) {
+            listTrailerMovie = new ArrayList<String>();
+            in.readList(listTrailerMovie, String.class.getClassLoader());
+        } else {
+            listTrailerMovie = null;
+        }
+        voteCount = in.readInt();
+        voteAverage = in.readByte() == 0x00 ? null : in.readDouble();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(urlMovie);
+        dest.writeString(nameMovie);
+        dest.writeString(yearMovie);
+        dest.writeString(popularity);
+        dest.writeString(imageMovie);
+        dest.writeString(descriptionMovie);
+        if (listTrailerMovie == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(listTrailerMovie);
+        }
+        dest.writeInt(voteCount);
+        if (voteAverage == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(voteAverage);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }
+

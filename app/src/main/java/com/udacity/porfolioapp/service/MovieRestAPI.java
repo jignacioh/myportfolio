@@ -1,9 +1,6 @@
 package com.udacity.porfolioapp.service;
 
 import com.udacity.porfolioapp.model.ListMovie;
-import com.udacity.porfolioapp.model.Movie;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -14,8 +11,8 @@ import retrofit2.http.Query;
  */
 
 public interface MovieRestAPI {
-    @GET("discover/movie")
-    Call<ListMovie> loadAllMovies(@Query("api_key") String apiKey);
+    //@GET("discover/movie")
+    //Call<ListMovie> loadAllMovies(@Query("api_key") String apiKey);
     @GET("movie/popular")
     Call<ListMovie> loadMostPopularMovies(@Query("api_key") String apiKey);
     @GET("movie/top_rated")

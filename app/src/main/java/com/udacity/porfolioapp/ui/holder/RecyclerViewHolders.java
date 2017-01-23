@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.udacity.porfolioapp.activity.MainActivity;
 import com.udacity.porfolioapp.listener.OnChildClickListener;
 import com.udacity.porfolioapp.R;
 
@@ -18,7 +17,6 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View
 
     public TextView tvNameApp;
     public ImageView ivImageApp;
-    public MainActivity mainActivity;
     OnChildClickListener onChildClickListener;
     public RecyclerViewHolders(View itemView, OnChildClickListener onChildClickListener) {
         super(itemView);
