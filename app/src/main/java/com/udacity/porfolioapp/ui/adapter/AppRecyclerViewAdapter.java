@@ -1,13 +1,11 @@
 package com.udacity.porfolioapp.ui.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.porfolioapp.MainActivity;
-import com.udacity.porfolioapp.OnChildClickListener;
+import com.udacity.porfolioapp.listener.OnChildClickListener;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.ui.holder.RecyclerViewHolders;
 import com.udacity.porfolioapp.model.AppObject;
@@ -15,7 +13,7 @@ import com.udacity.porfolioapp.model.AppObject;
 import java.util.List;
 
 /**
- * Created by clapj on 1/11/2016.
+ * Created by Juan PC
  */
 
 public class AppRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolders> {

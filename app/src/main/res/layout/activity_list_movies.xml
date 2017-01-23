@@ -9,7 +9,7 @@
         android:name="com.udacity.porfolioapp.fragment.ListMoviesFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ListMoviesActivity"
+        tools:context=".activity.ListMoviesActivity"
         tools:layout="@android:layout/list_content" />
 
 </LinearLayout>

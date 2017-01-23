@@ -7,19 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.udacity.porfolioapp.OnMovieClickListener;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.ListMoviesFragment;
-import com.udacity.porfolioapp.model.AppObject;
-import com.udacity.porfolioapp.model.ListMovie;
 import com.udacity.porfolioapp.model.Movie;
 import com.udacity.porfolioapp.ui.holder.MovieViewHolder;
-import com.udacity.porfolioapp.ui.holder.RecyclerViewHolders;
 
 import java.util.List;
 
 /**
- * Created by clapj on 5/11/2016.
+ * Created by Juan PC
  */
 
 public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieViewHolder> {

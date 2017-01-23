@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by clapj on 5/11/2016.
+ * Created by juan
  */
 
 public class Movie implements Serializable   {
@@ -17,8 +17,8 @@ public class Movie implements Serializable   {
     private String nameMovie;
     @SerializedName("release_date")
     private String yearMovie;
-    @SerializedName("id")
-    private String durationMovie;
+    @SerializedName("popularity")
+    private String popularity;
     @SerializedName("backdrop_path")
     private String imageMovie;
     @SerializedName("overview")
@@ -38,7 +38,6 @@ public class Movie implements Serializable   {
         this.urlMovie = urlMovie;
         this.nameMovie = nameMovie;
         this.yearMovie = yearMovie;
-        this.durationMovie = durationMovie;
         this.descriptionMovie = descriptionMovie;
         this.listTrailerMovie = listTrailerMovie;
     }
@@ -67,12 +66,12 @@ public class Movie implements Serializable   {
         this.imageMovie = imageMovie;
     }
 
-    public String getDurationMovie() {
-        return durationMovie;
+    public String getPopularity() {
+        return popularity;
     }
 
-    public void setDurationMovie(String durationMovie) {
-        this.durationMovie = durationMovie;
+    public void setPopularity(String popularity) {
+        this.popularity = popularity;
     }
 
     public String getUrlMovie() {

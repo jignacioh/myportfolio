@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal" android:orientation="horizontal"
-    android:showDividers="middle" tools:context=".ListMoviesActivity">
+    android:showDividers="middle" tools:context=".activity.ListMoviesActivity">
 
     <!--
     This layout is a two-pane layout for the Items

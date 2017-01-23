@@ -4,20 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.udacity.porfolioapp.OnMovieClickListener;
+import com.udacity.porfolioapp.util.NetworkUtil;
+import com.udacity.porfolioapp.listener.OnMovieClickListener;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.model.ListMovie;
 import com.udacity.porfolioapp.model.Movie;
@@ -31,39 +33,38 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
+ * Created by Juan PC
  */
-public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,OnMovieClickListener,View.OnClickListener {
+public class ListMoviesFragment extends BaseFragment implements Callback<ListMovie>,OnMovieClickListener,View.OnClickListener {
 
     // TODO: Customize parameter argument names
     public static final String ARG_COLUMN_COUNT = "column-count";
-    private GridLayoutManager lLayout;
-    private RecyclerView rvMovies;
-    private SwipeRefreshLayout swipeContainer;
-    Retrofit retrofit;
-    private Callbacks mCallbacks ;
-    private List<Movie> listMovies;
-    private int mColumnCount = 2;
-    private OnListFragmentInteractionListener mListener;
-    private MovieRecyclerViewAdapter mrvAdapter;
+    public static final int TYPE_ALL_MOVIES= 1;
     private final static String API_KEY = "b3420c7e4ccc91fd03c3cd0ff60d9a92";
 
-    private Boolean isFabOpen = false;
-    private FloatingActionButton fab,fab1,fab2;
+
+    private RecyclerView rvMovies;
+    private SwipeRefreshLayout swipeContainer;
+    private FloatingActionButton fab,fabPopular,fabRated;
+    private TextView tvType;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public ListMoviesFragment() {
-    }
+    private LinearLayout llMessage;
+    private Button btReload;
+
+    private Callbacks mCallbacks ;
+    private List<Movie> listMovies;
+    private MovieRestAPI apiService;
+    private OnListFragmentInteractionListener mListener;
+    private MovieRecyclerViewAdapter mrvAdapter;
+
+    private int mColumnCount = 2;
+
+    private int idTypeSort;
+    private Boolean isFabOpen = false;
+
+
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
@@ -90,22 +91,20 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
         if(isFabOpen){
 
             fab.startAnimation(rotate_backward);
-            fab1.startAnimation(fab_close);
-            fab2.startAnimation(fab_close);
-            fab1.setClickable(false);
-            fab2.setClickable(false);
+            fabPopular.startAnimation(fab_close);
+            fabRated.startAnimation(fab_close);
+            fabPopular.setClickable(false);
+            fabRated.setClickable(false);
             isFabOpen = false;
-            Log.d("Raj", "close");
 
         } else {
 
             fab.startAnimation(rotate_forward);
-            fab1.startAnimation(fab_open);
-            fab2.startAnimation(fab_open);
-            fab1.setClickable(true);
-            fab2.setClickable(true);
+            fabPopular.startAnimation(fab_open);
+            fabRated.startAnimation(fab_open);
+            fabPopular.setClickable(true);
+            fabRated.setClickable(true);
             isFabOpen = true;
-            Log.d("Raj","open");
 
         }
     }
@@ -113,20 +112,25 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listmovies_list, container, false);
-
+        apiService = ApiClient.getClient().create(MovieRestAPI.class);
+        idTypeSort=TYPE_ALL_MOVIES;
         Context context = view.getContext();
 
         fab = (FloatingActionButton)view.findViewById(R.id.fab);
-        fab1 = (FloatingActionButton)view.findViewById(R.id.fab1);
-        fab2 = (FloatingActionButton)view.findViewById(R.id.fab2);
+        fabPopular = (FloatingActionButton)view.findViewById(R.id.fabPopular);
+        fabRated = (FloatingActionButton)view.findViewById(R.id.fabRated);
+        tvType=(TextView)view.findViewById(R.id.tvType);
+        llMessage=(LinearLayout) view.findViewById(R.id.llMessage);
+        btReload=(Button) view.findViewById(R.id.btRetry);
+
         fab_open = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.fab_close);
         rotate_forward = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.rotate_forward);
         rotate_backward = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.rotate_backward);
         fab.setOnClickListener(this);
-        fab1.setOnClickListener(this);
-        fab2.setOnClickListener(this);
-
+        fabPopular.setOnClickListener(this);
+        fabRated.setOnClickListener(this);
+        btReload.setOnClickListener(this);
 
         rvMovies= (RecyclerView) view.findViewById(R.id.rvMovies);
         if (mColumnCount <= 1) {
@@ -136,36 +140,20 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
         }
 
 
-
         listMovies=new ArrayList<>();
-
-        //lLayout = new GridLayoutManager(context, 2);
         swipeContainer=(SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         rvMovies.setHasFixedSize(true);
-        // rvMovies.setLayoutManager(lLayout);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    rvMovies.setVisibility(View.GONE);
-                    MovieRestAPI apiService =
-                            ApiClient.getClient().create(MovieRestAPI.class);
-
-                    Call<ListMovie> call = apiService.loadMovies();
-                    call.enqueue(ListMoviesFragment.this);
+                    sortByPreference(idTypeSort);
                 }
             });
         swipeContainer.setRefreshing(true);
 
 
-
-        MovieRestAPI apiService =
-                ApiClient.getClient().create(MovieRestAPI.class);
-
-        Call<ListMovie> call = apiService.loadAllMovies(API_KEY);
-        call.enqueue(ListMoviesFragment.this);
-
-
+        sortByPreference(TYPE_ALL_MOVIES);
 
         return view;
     }
@@ -197,11 +185,11 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        mCallbacks = sDummyCallbacks;
     }
 
     @Override
     public void onResponse(Call<ListMovie> call, Response<ListMovie> response) {
+        tvType.setVisibility(View.VISIBLE);
         rvMovies.setVisibility(View.VISIBLE);
         listMovies.clear();
         listMovies.addAll(response.body().movieList);
@@ -209,22 +197,24 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
         mrvAdapter = new MovieRecyclerViewAdapter(getContext(),mCallbacks, listMovies);
         rvMovies.setItemAnimator(new DefaultItemAnimator());
         rvMovies.setAdapter(mrvAdapter);
+
+        changeTypeSortText();
     }
 
     @Override
     public void onFailure(Call<ListMovie> call, Throwable t) {
+        swipeContainer.setRefreshing(false);
+        tvType.setVisibility(View.GONE);
         rvMovies.setVisibility(View.GONE);
+        llMessage.setVisibility(View.VISIBLE);
     }
-    public void setActivateOnItemClick(boolean activateOnItemClick) {
-        // When setting CHOICE_MODE_SINGLE, ListView will automatically give items the 'activated' state when touched.
+    private void changeTypeSortText() {
+        if (idTypeSort==R.id.fabPopular){
+            tvType.setText(getResources().getString(R.string.lb_popular));
+        }else if (idTypeSort==R.id.fabRated){
+            tvType.setText(getResources().getString(R.string.lb_rated));
+        }
     }
-
-    public void changeNumberofRow(int mColumnCount) {
-        this.mColumnCount=mColumnCount;
-        mrvAdapter.notifyDataSetChanged();
-
-    }
-
     @Override
     public void onMovieClick(int position) {
         mListener.onFragmentInteraction(Uri.parse(ListMoviesFragment.class.getSimpleName()),listMovies.get(position));
@@ -232,45 +222,61 @@ public class ListMoviesFragment extends Fragment implements Callback<ListMovie>,
 
     @Override
     public void onClick(View view) {
-        int id = view.getId();
-        switch (id){
-            case R.id.fab:
-
-                animateFAB();
-                break;
-            case R.id.fab1:
-
-                break;
-            case R.id.fab2:
-
-                break;
+        if (view.getId()==R.id.btRetry){
+            sortByPreference(idTypeSort);
+        }else
+        if (view.getId()==R.id.fab){
+            animateFAB();
+        }else {
+            idTypeSort = view.getId();
+            sortByPreference(idTypeSort);
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    private void sortByPreference(int idTypeSort) {
+        Call<ListMovie> call;
+        if (NetworkUtil.isOnline(getContext())) {
+            swipeContainer.setRefreshing(true);
+            //tvType.setVisibility(View.VISIBLE);
+            rvMovies.setVisibility(View.VISIBLE);
+            llMessage.setVisibility(View.GONE);
+            switch (idTypeSort) {
+                case TYPE_ALL_MOVIES:
+                    rvMovies.setVisibility(View.GONE);
+                    call = apiService.loadAllMovies(API_KEY);
+                    call.enqueue(ListMoviesFragment.this);
+                    break;
+                case R.id.fabPopular:
+                    rvMovies.setVisibility(View.GONE);
+                    call = apiService.loadHighRatedMovies(API_KEY);
+                    call.enqueue(ListMoviesFragment.this);
+                    break;
+                case R.id.fabRated:
+                    rvMovies.setVisibility(View.GONE);
+                    call = apiService.loadMostPopularMovies(API_KEY);
+                    call.enqueue(ListMoviesFragment.this);
+                    break;
+            }
+        }else {
+            swipeContainer.setRefreshing(false);
+            tvType.setVisibility(View.GONE);
+            rvMovies.setVisibility(View.GONE);
+            llMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         public void onFragmentInteraction(Uri uri, Object object);
     }
     public interface Callbacks {
-        /**
-         * Callback for when an item has been selected.
-         */
         public void onItemSelected(ArrayList<Movie> list,int position);
     }
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(ArrayList<Movie> list,int position) {
 
-        }
-    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

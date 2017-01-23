@@ -1,4 +1,4 @@
-package com.udacity.porfolioapp;
+package com.udacity.porfolioapp.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailMovieFragment;
 import com.udacity.porfolioapp.fragment.ListMoviesFragment;
 import com.udacity.porfolioapp.model.ListMovie;
@@ -18,18 +19,17 @@ import com.udacity.porfolioapp.model.Movie;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-
+/**
+ * Created by Juan PC
+ */
 public class ListMoviesActivity extends AppCompatActivity implements Callback<ListMovie>, ListMoviesFragment.Callbacks,ListMoviesFragment.OnListFragmentInteractionListener  {
     private GridLayoutManager lLayout;
     private RecyclerView rvMovies;
     private SwipeRefreshLayout swipeContainer;
-    Retrofit retrofit;
 
     private List<Movie> listMovies;
 
@@ -38,21 +38,11 @@ public class ListMoviesActivity extends AppCompatActivity implements Callback<Li
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_movies);
-        getSupportActionBar().setTitle("My List Movies");
+        getSupportActionBar().setTitle(getResources().getString(R.string.lb_my_movies));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         if (findViewById(R.id.movie_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-large and
-            // res/values-sw600dp). If this view is present, then the
-            // activity should be in two-pane mode.
             mTwoPane = true;
-
-            // In two-pane mode, list items should be given the
-            // 'activated' state when touched.
-           /* ((ListMoviesFragment) getSupportFragmentManager().findFragmentById(R.id.item_list)).setActivateOnItemClick(true);
-
-            ((ListMoviesFragment) getSupportFragmentManager().findFragmentById(R.id.item_list)).setArguments(bundle);*/
             Bundle bundle=new Bundle();
             bundle.putInt(ListMoviesFragment.ARG_COLUMN_COUNT,3);
             ListMoviesFragment fragment = new ListMoviesFragment();

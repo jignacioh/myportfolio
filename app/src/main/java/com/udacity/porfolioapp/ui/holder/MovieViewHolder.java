@@ -7,14 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.udacity.porfolioapp.OnMovieClickListener;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.ListMoviesFragment;
 import com.udacity.porfolioapp.model.Movie;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by clapj on 5/11/2016.

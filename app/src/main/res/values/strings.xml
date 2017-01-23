@@ -1,8 +1,18 @@
 <resources>
-    <string name="app_name">PorfolioApp</string>
+    <string name="app_name">PopMovies</string>
     <string name="titleName">My Nanodegree Apps</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_item_movie">ItemMovieActivity</string>
+
+
+    <string name="msg_no_internet">Check your connection and try again</string>
+
+    <string name="bt_retry">Retry</string>
+
+    <string name="lb_my_movies">My Movies</string>
+    <string name="lb_all">All</string>
+    <string name="lb_popular">Most Popular</string>
+    <string name="lb_rated">High Rated</string>
 </resources>

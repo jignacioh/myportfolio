@@ -1,9 +1,9 @@
-package com.udacity.porfolioapp;
+package com.udacity.porfolioapp.listener;
 
 import com.udacity.porfolioapp.model.Movie;
 
 /**
- * Created by clapj on 15/11/2016.
+ * Created by Juan PC
  */
 
 public interface OnMovieClickListener {

@@ -6,12 +6,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.udacity.porfolioapp.MainActivity;
-import com.udacity.porfolioapp.OnChildClickListener;
+import com.udacity.porfolioapp.activity.MainActivity;
+import com.udacity.porfolioapp.listener.OnChildClickListener;
 import com.udacity.porfolioapp.R;
 
 /**
- * Created by clapj on 1/11/2016.
+ * Created by Juan PC
  */
 
 public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener{

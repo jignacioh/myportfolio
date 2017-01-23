@@ -10,13 +10,14 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 /**
- * Created by clapj on 5/11/2016.
+ * Created by Juan PC
  */
 
 public interface MovieRestAPI {
-    @GET("/rest/MovieResponse.php")
-    Call<ListMovie> loadMovies();
-
-    @GET("movie/top_rated")
+    @GET("discover/movie")
     Call<ListMovie> loadAllMovies(@Query("api_key") String apiKey);
+    @GET("movie/popular")
+    Call<ListMovie> loadMostPopularMovies(@Query("api_key") String apiKey);
+    @GET("movie/top_rated")
+    Call<ListMovie> loadHighRatedMovies(@Query("api_key") String apiKey);
 }

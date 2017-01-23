@@ -1,14 +1,17 @@
-package com.udacity.porfolioapp;
+package com.udacity.porfolioapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailMovieFragment;
-
+import com.udacity.porfolioapp.model.Movie;
+/**
+ * Created by Juan PC
+ */
 public class ItemMovieActivity extends AppCompatActivity {
 
     @Override
@@ -17,6 +20,8 @@ public class ItemMovieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item_movie);
 
         // Show the Up button in the action bar.
+        Movie movie= (Movie) getIntent().getSerializableExtra(DetailMovieFragment.ARG_ITEM_MOVIE);
+        getSupportActionBar().setTitle(movie.getNameMovie());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // savedInstanceState is non-null when there is fragment state
@@ -43,13 +48,6 @@ public class ItemMovieActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
             NavUtils.navigateUpTo(this, new Intent(this, ListMoviesActivity.class));
             return true;
         }

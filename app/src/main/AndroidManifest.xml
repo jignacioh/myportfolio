@@ -3,23 +3,24 @@
     package="com.udacity.porfolioapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
+        android:name=".activity.BaseContextApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.ListMoviesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListMoviesActivity" />
+        <!--activity android:name=".activity.ListMoviesActivity" /-->
         <activity
-            android:name=".ItemMovieActivity"
+            android:name=".activity.ItemMovieActivity"
             android:label="@string/title_activity_item_movie"></activity>
     </application>
 

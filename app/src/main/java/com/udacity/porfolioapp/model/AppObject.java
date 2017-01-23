@@ -1,7 +1,7 @@
 package com.udacity.porfolioapp.model;
 
 /**
- * Created by clapj on 1/11/2016.
+ * Created by juan
  */
 
 public class AppObject {

@@ -1,25 +1,19 @@
 package com.udacity.porfolioapp.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.model.Movie;
-
-import butterknife.BindDimen;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
+/**
+ * Created by Juan PC
+ */
 public class DetailMovieFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
@@ -38,21 +32,12 @@ public class DetailMovieFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    @BindView(R.id.ivDetailMovie)
-    ImageView ivImageMovie;
-    @BindView(R.id.tvDurationMovie)
-    TextView tvDurationMovie;
-    @BindView(R.id.tvSummaryMovie)
-    TextView tvSummaryMovie;
-    @BindView(R.id.tvVotosMovie)
-    TextView tvVotosMovie;
-    @BindView(R.id.tvRatedMovie)
-    TextView tvRatedMovie;
-    @BindView(R.id.tvYearMovie)
-    TextView tvYearMovie;
-    @BindView(R.id.showRatingBar)
-    RatingBar rbRated;
-
+    private ImageView ivImageMovie;
+    private TextView tvPopularityMovie;
+    private TextView tvSummaryMovie;
+    private TextView tvVotosMovie;
+    private TextView tvRatedMovie;
+    private TextView tvYearMovie;
     public DetailMovieFragment() {
     }
 
@@ -68,24 +53,21 @@ public class DetailMovieFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail_movie, container, false);
-        ButterKnife.bind(this, rootView);
         ivImageMovie=(ImageView)rootView.findViewById(R.id.ivDetailMovie);
-        tvDurationMovie=(TextView) rootView.findViewById(R.id.tvDurationMovie);
+        tvPopularityMovie=(TextView) rootView.findViewById(R.id.tvPopularityMovie);
         tvSummaryMovie=(TextView)rootView.findViewById(R.id.tvSummaryMovie);
         tvRatedMovie=(TextView) rootView.findViewById(R.id.tvRatedMovie);
         tvVotosMovie=(TextView)rootView.findViewById(R.id.tvVotosMovie);
         tvYearMovie=(TextView)rootView.findViewById(R.id.tvYearMovie);
 
-        rbRated=(RatingBar)rootView.findViewById(R.id.showRatingBar);
         Glide.with(this).load(BASE_IMAGE+movie.getImageMovie()).placeholder(R.drawable.placeholder).crossFade().into( ivImageMovie);
 
-        tvDurationMovie.setText("Duration: "+movie.getDurationMovie());
+        tvPopularityMovie.setText("Popularity: "+movie.getPopularity());
         tvSummaryMovie.setText("Summary: "+movie.getDescriptionMovie());
         tvYearMovie.setText("Release date: "+movie.getYearMovie());
         tvVotosMovie.setText("Votes: "+movie.getVoteCount());
         tvRatedMovie.setText("Rated: "+movie.getVoteAverage());
 
-        rbRated.setStepSize(5.0f);
         return rootView;
     }
 }

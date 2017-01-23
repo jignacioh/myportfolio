@@ -15,9 +15,8 @@ import com.udacity.porfolioapp.ui.holder.TrailerViewHolder;
 import java.util.List;
 
 /**
- * Created by clapj on 14/11/2016.
+ * Created by Juan PC
  */
-
 public class TrailerRecyclerViewAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
 
     private List<String> trailerList;

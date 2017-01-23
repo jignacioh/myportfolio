@@ -11,32 +11,75 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.udacity.porfolioapp.fragment.ListMoviesFragment">
-
-    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swipeContainer"
-        android:layout_width="match_parent"
+    <RelativeLayout
+        tools:ignore="MissingPrefix"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvMovies"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/card_view_movie" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvType">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                app:layoutManager="LinearLayoutManager"
+                tools:listitem="@layout/card_view_movie" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <TextView
+            fontPath="fonts/Roboto-Bold.ttf"
+            android:id="@+id/tvType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lb_all"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textColor="@android:color/background_dark"
+            android:layout_marginBottom="4dp"
+            android:layout_alignParentTop="true" />
+        <LinearLayout
+            android:id="@+id/llMessage"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/black"
+                android:text="@string/msg_no_internet"/>
+            <Button
+
+                android:id="@+id/btRetry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/bt_retry"
+                android:textColor="@android:color/white"
+                style="@style/Widget.AppCompat.Button.Colored"/>
+        </LinearLayout>
+    </RelativeLayout>
+
 
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab2"
+        android:id="@+id/fabPopular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="140dp"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:visibility="invisible"
         app:backgroundTint="@android:color/white"
         app:elevation="6dp"
@@ -44,22 +87,20 @@
         android:src="@drawable/img_popular" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab1"
+        android:id="@+id/fabRated"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="80dp"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:visibility="invisible"
         app:elevation="6dp"
         app:backgroundTint="@android:color/white"
         app:pressedTranslationZ="12dp"
         android:src="@drawable/ic_rating" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="High rating"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

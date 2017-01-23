@@ -1,7 +1,7 @@
-package com.udacity.porfolioapp;
+package com.udacity.porfolioapp.listener;
 
 /**
- * Created by clapj on 5/11/2016.
+ * Created by Juan PC
  */
 
 public interface OnChildClickListener {

@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.udacity.porfolioapp.R;
 
 /**
- * Created by clapj on 14/11/2016.
+ * Created by Juan PC
  */
 
 public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
