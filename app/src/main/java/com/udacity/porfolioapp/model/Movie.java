@@ -8,12 +8,18 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by juan
  */
 
-public class Movie implements Parcelable   {
+public class Movie extends RealmObject implements Parcelable   {
 
+    @PrimaryKey
+    @SerializedName("id")
+    private int id;
     @SerializedName("poster_path")
     private String urlMovie;
     @SerializedName("original_title")
@@ -43,6 +49,14 @@ public class Movie implements Parcelable   {
         this.yearMovie = yearMovie;
         this.descriptionMovie = descriptionMovie;
         this.listTrailerMovie = listTrailerMovie;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getVoteCount() {
