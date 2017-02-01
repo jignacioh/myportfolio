@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.udacity.porfolioapp.fragment.DetailMovieFragment">
+
+    <LinearLayout
+        android:id="@+id/llHeaderTittle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tittle_height"
+        android:background="@color/colorAccent">
+
+        <TextView
+            android:text="Title"
+            android:textSize="@dimen/text_size"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+    <ImageView
+        android:layout_below="@+id/llHeaderTittle"
+        android:id="@+id/ivDetailMovie"
+        android:src="@drawable/logo_android"
+        android:layout_width="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:layout_alignParentTop="true"
+        android:layout_height="200dp" />
+
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_below="@+id/ivDetailMovie"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="3dp"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@android:color/white">
+
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:id="@+id/tvSummaryMovie"
+                android:textColor="@color/blue_grey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_below="@+id/tvSummaryMovie"
+                android:layout_marginTop="10dp"
+                android:id="@+id/tvYearMovie"
+                android:textColor="@color/blue_grey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_below="@+id/tvYearMovie"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/blue_grey"
+                android:id="@+id/tvPopularityMovie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_below="@+id/tvPopularityMovie"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/blue_grey"
+                android:id="@+id/tvVotosMovie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_below="@+id/tvVotosMovie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/blue_grey"
+                    android:id="@+id/tvRatedMovie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+
+
+</RelativeLayout>
