@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
+    android:transitionName="profile"
     app:cardUseCompatPadding="true">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,6 +16,7 @@
             android:id="@+id/ivImageMovie"
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:transitionName="profile"
             android:scaleType="centerCrop"
             android:src="@drawable/placeholder"/>
         <TextView

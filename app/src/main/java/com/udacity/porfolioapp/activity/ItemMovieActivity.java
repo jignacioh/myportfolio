@@ -1,8 +1,6 @@
 package com.udacity.porfolioapp.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -48,7 +46,8 @@ public class ItemMovieActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            NavUtils.navigateUpTo(this, new Intent(this, ListMoviesActivity.class));
+            //NavUtils.navigateUpTo(this, new Intent(this, ListMoviesActivity.class));
+            supportFinishAfterTransition();
             return true;
         }
         return super.onOptionsItemSelected(item);

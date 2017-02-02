@@ -35,7 +35,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     @Override
     public void onClick(View view) {
-        mCallbacks.onItemSelected((ArrayList<Movie>)layoutView.getTag(),getAdapterPosition());
+        mCallbacks.onItemSelected((ArrayList<Movie>)layoutView.getTag(),getAdapterPosition(), layoutView.findViewById(R.id.ivImageMovie));
         Toast.makeText(view.getContext(), tvNameMovie.getText().toString(), Toast.LENGTH_SHORT).show();
     }
 }

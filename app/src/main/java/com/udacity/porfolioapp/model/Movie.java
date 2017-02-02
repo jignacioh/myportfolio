@@ -8,16 +8,13 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
 /**
  * Created by juan
  */
 
-public class Movie extends RealmObject implements Parcelable   {
+public class Movie implements Parcelable   {
 
-    @PrimaryKey
+
     @SerializedName("id")
     private int id;
     @SerializedName("poster_path")

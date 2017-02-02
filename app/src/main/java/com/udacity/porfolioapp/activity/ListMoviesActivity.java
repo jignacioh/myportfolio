@@ -1,13 +1,17 @@
 package com.udacity.porfolioapp.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -77,8 +81,9 @@ public class ListMoviesActivity extends AppCompatActivity implements Callback<Li
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public void onItemSelected(ArrayList<Movie> list, int position) {
+    public void onItemSelected(ArrayList<Movie> list, int position,View view) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -92,9 +97,32 @@ public class ListMoviesActivity extends AppCompatActivity implements Callback<Li
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
-            Intent detailIntent = new Intent(this, ItemMovieActivity.class);
-            detailIntent.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,(Parcelable) list.get(position));
-            startActivity(detailIntent);
+            //Intent detailIntent = new Intent(this, ItemMovieActivity.class);
+            //detailIntent.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,(Parcelable) list.get(position));
+            //startActivity(detailIntent);
+
+
+            //Intent intent = new Intent(this, ItemMovieActivity.class);
+            // Pass data object in the bundle and populate details activity.
+            //intent.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,(Parcelable) list.get(position));
+            //ActivityOptionsCompat options = ActivityOptionsCompat.
+            //        makeSceneTransitionAnimation(this, view, "profile");
+            //startActivity(intent, options.toBundle());
+
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                Intent intentD = new Intent(this, ItemMovieActivity.class);
+                Pair<View, String> pair1 = Pair.create(view, view.getTransitionName());
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, view.getTransitionName());
+                intentD.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,(Parcelable) list.get(position));
+                startActivity(intentD, options.toBundle());
+            }
+            else {
+                Intent detailIntent = new Intent(this, ItemMovieActivity.class);
+                detailIntent.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,(Parcelable) list.get(position));
+                startActivity(detailIntent);
+            }
         }
     }
 }

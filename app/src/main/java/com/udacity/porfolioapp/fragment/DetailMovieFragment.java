@@ -1,5 +1,6 @@
 package com.udacity.porfolioapp.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -59,8 +60,10 @@ public class DetailMovieFragment extends Fragment {
         tvRatedMovie=(TextView) rootView.findViewById(R.id.tvRatedMovie);
         tvVotosMovie=(TextView)rootView.findViewById(R.id.tvVotosMovie);
         tvYearMovie=(TextView)rootView.findViewById(R.id.tvYearMovie);
-
-        Glide.with(this).load(BASE_IMAGE+movie.getImageMovie()).placeholder(R.drawable.placeholder).crossFade().into( ivImageMovie);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ivImageMovie.setTransitionName("profile");
+        }
+        Glide.with(this).load(BASE_IMAGE+movie.getUrlMovie()).placeholder(R.drawable.placeholder).crossFade().into( ivImageMovie);
 
         tvPopularityMovie.setText("Popularity: "+movie.getPopularity());
         tvSummaryMovie.setText("Summary: "+movie.getDescriptionMovie());

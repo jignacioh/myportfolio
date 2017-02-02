@@ -266,7 +266,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         public void onFragmentInteraction(Uri uri, Object object);
     }
     public interface Callbacks {
-        public void onItemSelected(ArrayList<Movie> list,int position);
+        public void onItemSelected(ArrayList<Movie> list,int position,View view);
     }
 
 
