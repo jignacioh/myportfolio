@@ -22,13 +22,13 @@ public class DetailMovieHolder extends RecyclerView.ViewHolder {
 
     public DetailMovieHolder(View view){
         super(view);
-        tvTittle=(TextView)view.findViewById(R.id.tvLink);
+        //tvTittle=(TextView)view.findViewById(R.id.tvLink);
         ivPoster=(ImageView) view.findViewById(R.id.ivDetailMovie);
-        tvPopularityMovie=(TextView) view.findViewById(R.id.tvLink);
-        tvSummaryMovie=(TextView) view.findViewById(R.id.tvLink);
-        tvVotosMovie=(TextView) view.findViewById(R.id.tvLink);
-        tvRatedMovie=(TextView) view.findViewById(R.id.tvLink);
-        tvYearMovie=(TextView) view.findViewById(R.id.tvLink);
+        tvPopularityMovie=(TextView) view.findViewById(R.id.tvPopularityMovie);
+        tvSummaryMovie=(TextView) view.findViewById(R.id.tvSummaryMovie);
+        tvVotosMovie=(TextView) view.findViewById(R.id.tvVotosMovie);
+        tvRatedMovie=(TextView) view.findViewById(R.id.tvRatedMovie);
+        tvYearMovie=(TextView) view.findViewById(R.id.tvYearMovie);
 
     }
 

@@ -10,6 +10,7 @@
         android:id="@+id/llHeaderTittle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tittle_height"
+        android:visibility="gone"
         android:background="@color/colorAccent">
 
         <TextView
