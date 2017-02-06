@@ -8,6 +8,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.udacity.porfolioapp.R;
+import com.udacity.porfolioapp.fragment.DetailMovieFragment;
+
+import java.util.ArrayList;
 
 /**
  * Created by Juan PC
@@ -15,18 +18,23 @@ import com.udacity.porfolioapp.R;
 
 public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+    private final DetailMovieFragment.Callbacks mCallbacks;
     public TextView tvTrailer;
     public LinearLayout llHeaderTittle;
-    public TrailerViewHolder(View itemView) {
+    private View itemView;
+    public TrailerViewHolder(View itemView, DetailMovieFragment.Callbacks mCallbacks) {
         super(itemView);
-        itemView.setOnClickListener(this);
+        this.itemView=itemView;
+        this.mCallbacks=mCallbacks;
         tvTrailer = (TextView) itemView.findViewById(R.id.tvLink);
-        llHeaderTittle = (LinearLayout) itemView.findViewById(R.id.llHeaderTittle);
+        llHeaderTittle = (LinearLayout) itemView.findViewById(R.id.llTrailerContent);
+        llHeaderTittle.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(view.getContext(), tvTrailer.getText().toString(), Toast.LENGTH_SHORT).show();
+        mCallbacks.onItemSelected((ArrayList<Object>) itemView.getTag(),getAdapterPosition(),itemView);
+        //Toast.makeText(view.getContext(), tvTrailer.getText().toString(), Toast.LENGTH_SHORT).show();
     }
 
     public TextView getTvTrailer() {

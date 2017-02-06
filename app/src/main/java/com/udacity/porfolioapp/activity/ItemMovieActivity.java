@@ -1,16 +1,24 @@
 package com.udacity.porfolioapp.activity;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailMovieFragment;
 import com.udacity.porfolioapp.model.Movie;
+import com.udacity.porfolioapp.model.Trailer;
+
+import java.util.ArrayList;
+
 /**
  * Created by Juan PC
  */
-public class ItemMovieActivity extends AppCompatActivity {
+public class ItemMovieActivity extends AppCompatActivity implements  DetailMovieFragment.Callbacks{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,5 +59,15 @@ public class ItemMovieActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(ArrayList<Object> list, int position, View view) {
+        Trailer trailer= (Trailer) list.get(position);
+
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse("https://www.youtube.com/watch?v="+ trailer.getKey()));
+        startActivity(i);
+
     }
 }

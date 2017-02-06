@@ -7,12 +7,13 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by juan
  */
 
-public class Movie implements Parcelable   {
+public class Movie  implements Parcelable   {
 
 
     @SerializedName("id")
@@ -132,6 +133,7 @@ public class Movie implements Parcelable   {
 
 
     protected Movie(Parcel in) {
+        id = in.readInt();
         urlMovie = in.readString();
         nameMovie = in.readString();
         yearMovie = in.readString();
@@ -155,6 +157,7 @@ public class Movie implements Parcelable   {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(urlMovie);
         dest.writeString(nameMovie);
         dest.writeString(yearMovie);

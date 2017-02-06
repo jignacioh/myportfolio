@@ -1,6 +1,7 @@
 package com.udacity.porfolioapp.ui.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.udacity.porfolioapp.R;
+import com.udacity.porfolioapp.fragment.DetailMovieFragment;
 import com.udacity.porfolioapp.model.Movie;
 import com.udacity.porfolioapp.model.Trailer;
 import com.udacity.porfolioapp.ui.holder.DetailMovieHolder;
@@ -22,6 +24,7 @@ import java.util.List;
 public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final String BASE_IMAGE="http://image.tmdb.org/t/p/w500/";
+    private DetailMovieFragment.Callbacks mCallbacks;
     private Context context;
     // The items to display in your RecyclerView
     private List<Object> items;
@@ -29,9 +32,10 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     private final int DETAIL = 0, TRAILER = 1;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MainMovieRecyclerViewAdapter(List<Object> items,Context context) {
+    public MainMovieRecyclerViewAdapter(List<Object> items, Context context, DetailMovieFragment.Callbacks mCallbacks) {
         this.items = items;
         this.context=context;
+        this.mCallbacks=mCallbacks;
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -58,11 +62,13 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         switch (viewType) {
             case DETAIL:
                 View v1 = inflater.inflate(R.layout.item_head_movie, viewGroup, false);
-                viewHolder = new DetailMovieHolder(v1);
+                v1.setTag(items);
+                viewHolder = new DetailMovieHolder(v1,mCallbacks);
                 break;
             case TRAILER:
                 View v2 = inflater.inflate(R.layout.item_trailer, viewGroup, false);
-                viewHolder = new TrailerViewHolder(v2);
+                v2.setTag(items);
+                viewHolder = new TrailerViewHolder(v2,mCallbacks);
                 //break;
             default:
                 //View v = inflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
@@ -94,12 +100,16 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         Trailer trailer=(Trailer)items.get(position);
         if (trailer!=null){
             trailerViewHolder.getTvTrailer().setText("Trailer "+position);
+
         }
     }
 
     private void fillViewHolderDetail(DetailMovieHolder detailMovieHolder, int position) {
         Movie movie = (Movie) items.get(position);
         if (movie != null) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                detailMovieHolder.getIvPoster().setTransitionName("profile");
+            }
             Glide.with(context).load(BASE_IMAGE+movie.getUrlMovie()).placeholder(R.drawable.placeholder).crossFade().into(  detailMovieHolder.getIvPoster());
             detailMovieHolder.getTvPopularityMovie().setText("Popularity: "+movie.getPopularity());
             detailMovieHolder.getTvRatedMovie().setText("Rated: "+movie.getVoteAverage());
@@ -108,4 +118,5 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             detailMovieHolder.getTvSummaryMovie().setText("Summary: "+movie.getDescriptionMovie());
         }
     }
+
 }

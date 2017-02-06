@@ -244,12 +244,12 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
                 case R.id.fabPopular:
                     rvMovies.setVisibility(View.GONE);
                     call = apiService.loadHighRatedMovies(API_KEY);
-                    call.enqueue(ListMoviesFragment.this);
+                    call.enqueue(this);
                     break;
                 case R.id.fabRated:
                     rvMovies.setVisibility(View.GONE);
                     call = apiService.loadMostPopularMovies(API_KEY);
-                    call.enqueue(ListMoviesFragment.this);
+                    call.enqueue(this);
                     break;
             }
         }else {

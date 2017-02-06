@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.udacity.porfolioapp.R;
+import com.udacity.porfolioapp.fragment.DetailMovieFragment;
 
 /**
  * Created by jhurtace on 31/01/2017.
@@ -20,7 +21,7 @@ public class DetailMovieHolder extends RecyclerView.ViewHolder {
     private TextView tvRatedMovie;
     private TextView tvYearMovie;
 
-    public DetailMovieHolder(View view){
+    public DetailMovieHolder(View view, DetailMovieFragment.Callbacks mCallbacks){
         super(view);
         //tvTittle=(TextView)view.findViewById(R.id.tvLink);
         ivPoster=(ImageView) view.findViewById(R.id.ivDetailMovie);
