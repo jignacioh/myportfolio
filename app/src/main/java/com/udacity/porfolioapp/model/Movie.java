@@ -5,43 +5,82 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Keep;
+import org.greenrobot.greendao.annotation.NotNull;
+import org.greenrobot.greendao.annotation.Property;
+import org.greenrobot.greendao.annotation.ToMany;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import retrofit2.http.POST;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.DaoException;
+
 /**
  * Created by juan
  */
-
+@Entity
 public class Movie  implements Parcelable   {
 
+    public static final String ROW_POSTER="POSTER";
+    public static final String ROW_TITLE="TITLE";
+    public static final String ROW_DATE="DATE";
+    public static final String ROW_POPULAR="POPULAR";
+    public static final String ROW_BACKDROP="BACKDROP";
+    public static final String ROW_OVERVIEW="OVERVIEW";
+    public static final String ROW_VOTE="VOTE";
+    public static final String ROW_AVERAGE="AVERAGE";
 
+
+    @Id
     @SerializedName("id")
-    private int id;
+    private Long id;
+
+    @Property(nameInDb = ROW_POSTER)
     @SerializedName("poster_path")
     private String urlMovie;
+
+    @Property(nameInDb = ROW_TITLE)
     @SerializedName("original_title")
     private String nameMovie;
+
+    @Property(nameInDb = ROW_DATE)
     @SerializedName("release_date")
     private String yearMovie;
+
+    @Property(nameInDb = ROW_POPULAR)
     @SerializedName("popularity")
     private String popularity;
+
+    @Property(nameInDb = ROW_BACKDROP)
     @SerializedName("backdrop_path")
     private String imageMovie;
+
+    @Property(nameInDb = ROW_OVERVIEW)
     @SerializedName("overview")
     private String descriptionMovie;
-    private List<String> listTrailerMovie;
 
+    @ToMany(referencedJoinProperty = "name")
+    private List<Trailer> listTrailerMovie;
+
+    @Property(nameInDb =ROW_VOTE)
+    @NotNull
     @SerializedName("vote_count")
     private int voteCount;
 
+    @Property(nameInDb = ROW_AVERAGE)
+    @NotNull
     @SerializedName("vote_average")
     private Double voteAverage;
 
     public Movie() {
     }
-
-    public Movie(String urlMovie, String nameMovie, String yearMovie, String durationMovie, String descriptionMovie, List<String> listTrailerMovie) {
+    @Keep
+    public Movie(String urlMovie, String nameMovie, String yearMovie, String durationMovie, String descriptionMovie, List<Trailer> listTrailerMovie) {
         this.urlMovie = urlMovie;
         this.nameMovie = nameMovie;
         this.yearMovie = yearMovie;
@@ -49,11 +88,11 @@ public class Movie  implements Parcelable   {
         this.listTrailerMovie = listTrailerMovie;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -122,18 +161,18 @@ public class Movie  implements Parcelable   {
     public void setDescriptionMovie(String descriptionMovie) {
         this.descriptionMovie = descriptionMovie;
     }
-
-    public List<String> getListTrailerMovie() {
+    @Keep
+    public List<Trailer> getListTrailerMovie() {
         return listTrailerMovie;
     }
 
-    public void setListTrailerMovie(List<String> listTrailerMovie) {
+    public void setListTrailerMovie(List<Trailer> listTrailerMovie) {
         this.listTrailerMovie = listTrailerMovie;
     }
 
 
     protected Movie(Parcel in) {
-        id = in.readInt();
+        id = in.readLong();
         urlMovie = in.readString();
         nameMovie = in.readString();
         yearMovie = in.readString();
@@ -141,13 +180,26 @@ public class Movie  implements Parcelable   {
         imageMovie = in.readString();
         descriptionMovie = in.readString();
         if (in.readByte() == 0x01) {
-            listTrailerMovie = new ArrayList<String>();
-            in.readList(listTrailerMovie, String.class.getClassLoader());
+            listTrailerMovie = new ArrayList<Trailer>();
+            in.readList(listTrailerMovie, Trailer.class.getClassLoader());
         } else {
             listTrailerMovie = null;
         }
         voteCount = in.readInt();
         voteAverage = in.readByte() == 0x00 ? null : in.readDouble();
+    }
+    @Keep
+    public Movie(Long id, String urlMovie, String nameMovie, String yearMovie, String popularity, String imageMovie, String descriptionMovie,
+            int voteCount, @NotNull Double voteAverage) {
+        this.id = id;
+        this.urlMovie = urlMovie;
+        this.nameMovie = nameMovie;
+        this.yearMovie = yearMovie;
+        this.popularity = popularity;
+        this.imageMovie = imageMovie;
+        this.descriptionMovie = descriptionMovie;
+        this.voteCount = voteCount;
+        this.voteAverage = voteAverage;
     }
 
     @Override
@@ -157,7 +209,7 @@ public class Movie  implements Parcelable   {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeLong(id);
         dest.writeString(urlMovie);
         dest.writeString(nameMovie);
         dest.writeString(yearMovie);
@@ -179,6 +231,55 @@ public class Movie  implements Parcelable   {
         }
     }
 
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 2115043241)
+    public synchronized void resetListTrailerMovie() {
+        listTrailerMovie = null;
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 215161401)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getMovieDao() : null;
+    }
+
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         @Override
@@ -191,5 +292,11 @@ public class Movie  implements Parcelable   {
             return new Movie[size];
         }
     };
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+    /** Used for active entity operations. */
+    @Generated(hash = 1042217376)
+    private transient MovieDao myDao;
 }
 

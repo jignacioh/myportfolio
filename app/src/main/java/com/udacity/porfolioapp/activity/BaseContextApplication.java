@@ -3,9 +3,13 @@ package com.udacity.porfolioapp.activity;
 import android.app.Application;
 
 import com.udacity.porfolioapp.R;
+import com.udacity.porfolioapp.model.DaoMaster;
+import com.udacity.porfolioapp.model.DaoSession;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import org.greenrobot.greendao.AbstractDaoMaster;
+import org.greenrobot.greendao.AbstractDaoSession;
+import org.greenrobot.greendao.database.Database;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -13,7 +17,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
  */
 
 public class BaseContextApplication extends Application {
-
+    private DaoSession daoSession;
+    public static final boolean ENCRYPTED = true;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -22,12 +27,12 @@ public class BaseContextApplication extends Application {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "movie-db");
+        Database db = helper.getWritableDb();
+        daoSession = new DaoMaster(db).newSession();
+    }
 
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
-                .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(0)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(realmConfiguration);
+    public DaoSession getDaoSession() {
+        return daoSession;
     }
 }

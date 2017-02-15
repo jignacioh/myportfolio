@@ -1,19 +1,27 @@
 package com.udacity.porfolioapp.ui.holder;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailMovieFragment;
+import com.udacity.porfolioapp.model.Movie;
+
+import java.util.ArrayList;
 
 /**
  * Created by jhurtace on 31/01/2017.
  */
-public class DetailMovieHolder extends RecyclerView.ViewHolder {
+public class DetailMovieHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener{
 
-    private TextView tvTittle;
+    private DetailMovieFragment.Callbacks mCallbacks;
+    private View view;
+    private ToggleButton ivAddFavo;
     private ImageView ivPoster;
     private TextView tvPopularityMovie;
     private TextView tvSummaryMovie;
@@ -23,22 +31,29 @@ public class DetailMovieHolder extends RecyclerView.ViewHolder {
 
     public DetailMovieHolder(View view, DetailMovieFragment.Callbacks mCallbacks){
         super(view);
-        //tvTittle=(TextView)view.findViewById(R.id.tvLink);
+        this.view=view;
+        this.mCallbacks=mCallbacks;
+        ivAddFavo=(ToggleButton) view.findViewById(R.id.ivAddFavo);
         ivPoster=(ImageView) view.findViewById(R.id.ivDetailMovie);
         tvPopularityMovie=(TextView) view.findViewById(R.id.tvPopularityMovie);
         tvSummaryMovie=(TextView) view.findViewById(R.id.tvSummaryMovie);
         tvVotosMovie=(TextView) view.findViewById(R.id.tvVotosMovie);
         tvRatedMovie=(TextView) view.findViewById(R.id.tvRatedMovie);
         tvYearMovie=(TextView) view.findViewById(R.id.tvYearMovie);
-
+        ivAddFavo.setOnCheckedChangeListener(this);
+    }
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        Log.i("CHECK",b+"");
+        mCallbacks.onItemCheckFavorite(b);
     }
 
-    public TextView getTvTittle() {
-        return tvTittle;
+    public ToggleButton getIvAddFavo() {
+        return ivAddFavo;
     }
 
-    public void setTvTittle(TextView tvTittle) {
-        this.tvTittle = tvTittle;
+    public void setIvAddFavo(ToggleButton ivAddFavo) {
+        this.ivAddFavo = ivAddFavo;
     }
 
     public ImageView getIvPoster() {
@@ -88,4 +103,7 @@ public class DetailMovieHolder extends RecyclerView.ViewHolder {
     public void setTvYearMovie(TextView tvYearMovie) {
         this.tvYearMovie = tvYearMovie;
     }
+
+
+
 }

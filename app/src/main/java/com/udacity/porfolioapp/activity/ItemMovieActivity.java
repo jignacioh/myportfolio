@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailMovieFragment;
+import com.udacity.porfolioapp.model.DaoSession;
 import com.udacity.porfolioapp.model.Movie;
 import com.udacity.porfolioapp.model.Trailer;
 
@@ -69,5 +71,20 @@ public class ItemMovieActivity extends AppCompatActivity implements  DetailMovie
         i.setData(Uri.parse("https://www.youtube.com/watch?v="+ trailer.getKey()));
         startActivity(i);
 
+    }
+
+    @Override
+    public void onItemCheckFavorite(boolean isFavorite) {
+        Movie movie = (Movie) getIntent().getParcelableExtra(DetailMovieFragment.ARG_ITEM_MOVIE);
+        if (isFavorite){
+            long movie_id = getAppDaoSession().getMovieDao().insert(movie);
+            Log.i("OK"," insert");
+        }else {
+            Log.i("OK","remove");
+            getAppDaoSession().getMovieDao().deleteByKey(movie.getId());
+        }
+    }
+    private DaoSession getAppDaoSession() {
+        return ((BaseContextApplication)getApplication()).getDaoSession();
     }
 }

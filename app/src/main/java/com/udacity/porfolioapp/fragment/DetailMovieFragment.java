@@ -147,6 +147,7 @@ public class DetailMovieFragment extends Fragment implements Callback<ListTraile
     }
     public interface Callbacks {
         public void onItemSelected(ArrayList<Object> list,int position,View view);
+        public void onItemCheckFavorite(boolean isFavorite);
     }
     /*try {
 
