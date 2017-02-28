@@ -54,13 +54,13 @@
             android:visibility="gone"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tvMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:textColor="@android:color/black"
                 android:text="@string/msg_no_internet"/>
             <Button
-
                 android:id="@+id/btRetry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,7 +72,19 @@
     </RelativeLayout>
 
 
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="200dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/white"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        android:src="@drawable/ic_favo_pressed" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabPopular"
         android:layout_width="wrap_content"

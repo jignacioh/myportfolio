@@ -11,10 +11,12 @@ import com.bumptech.glide.Glide;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailMovieFragment;
 import com.udacity.porfolioapp.model.Movie;
+import com.udacity.porfolioapp.model.MovieDao;
 import com.udacity.porfolioapp.model.Trailer;
 import com.udacity.porfolioapp.ui.holder.DetailMovieHolder;
-import com.udacity.porfolioapp.ui.holder.MovieViewHolder;
 import com.udacity.porfolioapp.ui.holder.TrailerViewHolder;
+
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ import java.util.List;
 public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final String BASE_IMAGE="http://image.tmdb.org/t/p/w500/";
+    private DetailMovieFragment detailMovieFragment;
     private DetailMovieFragment.Callbacks mCallbacks;
     private Context context;
     // The items to display in your RecyclerView
@@ -32,10 +35,11 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     private final int DETAIL = 0, TRAILER = 1;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MainMovieRecyclerViewAdapter(List<Object> items, Context context, DetailMovieFragment.Callbacks mCallbacks) {
+    public MainMovieRecyclerViewAdapter(List<Object> items, Context context, DetailMovieFragment.Callbacks mCallbacks, DetailMovieFragment detailMovieFragment) {
         this.items = items;
         this.context=context;
         this.mCallbacks=mCallbacks;
+        this.detailMovieFragment=detailMovieFragment;
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -116,6 +120,12 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             detailMovieHolder.getTvVotosMovie().setText("Votes: "+movie.getVoteCount());
             detailMovieHolder.getTvYearMovie().setText("Release date: "+movie.getYearMovie());
             detailMovieHolder.getTvSummaryMovie().setText("Summary: "+movie.getDescriptionMovie());
+        }
+        QueryBuilder<Movie> movieQueryBuilder=detailMovieFragment.getAppDaoSession().getMovieDao().queryBuilder();
+        if (movieQueryBuilder.where(MovieDao.Properties.Id.eq(movie.getId())).count()!=0){
+            detailMovieHolder.getIvAddFavo().setChecked(true);
+        }else {
+            detailMovieHolder.getIvAddFavo().setChecked(false);
         }
     }
 

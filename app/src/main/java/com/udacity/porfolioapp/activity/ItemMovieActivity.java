@@ -1,6 +1,5 @@
 package com.udacity.porfolioapp.activity;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -77,7 +76,7 @@ public class ItemMovieActivity extends AppCompatActivity implements  DetailMovie
     public void onItemCheckFavorite(boolean isFavorite) {
         Movie movie = (Movie) getIntent().getParcelableExtra(DetailMovieFragment.ARG_ITEM_MOVIE);
         if (isFavorite){
-            long movie_id = getAppDaoSession().getMovieDao().insert(movie);
+            long movie_id = getAppDaoSession().getMovieDao().insertOrReplace(movie);
             Log.i("OK"," insert");
         }else {
             Log.i("OK","remove");

@@ -1,8 +1,5 @@
 package com.udacity.porfolioapp.fragment;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,12 +9,18 @@ import android.view.ViewGroup;
 
 import com.udacity.porfolioapp.activity.BaseContextApplication;
 import com.udacity.porfolioapp.model.DaoSession;
+import com.udacity.porfolioapp.model.Movie;
+
+import org.greenrobot.greendao.query.QueryBuilder;
+
+import java.util.List;
 
 /**
  * Created by Juan PC on 22/01/2017.
  */
 
 public class BaseFragment extends Fragment {
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -29,7 +32,12 @@ public class BaseFragment extends Fragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    private DaoSession getAppDaoSession(){
+    public DaoSession getAppDaoSession(){
         return ((BaseContextApplication)getActivity().getApplication()).getDaoSession();
     }
+    public List<Movie> getFavoritesMovies() {
+        QueryBuilder<Movie> qb = getAppDaoSession().getMovieDao().queryBuilder();
+        return qb.list();
+    }
+
 }

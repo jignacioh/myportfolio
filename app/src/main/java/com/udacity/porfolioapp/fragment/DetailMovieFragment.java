@@ -1,10 +1,7 @@
 package com.udacity.porfolioapp.fragment;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,22 +11,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.listener.OnTrailerClickListener;
-import com.udacity.porfolioapp.model.ListMovie;
 import com.udacity.porfolioapp.model.ListTrailer;
 import com.udacity.porfolioapp.model.Movie;
 import com.udacity.porfolioapp.model.Trailer;
 import com.udacity.porfolioapp.service.ApiClient;
 import com.udacity.porfolioapp.service.MovieRestAPI;
 import com.udacity.porfolioapp.ui.adapter.MainMovieRecyclerViewAdapter;
-import com.udacity.porfolioapp.ui.adapter.MovieRecyclerViewAdapter;
 import com.udacity.porfolioapp.util.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +31,7 @@ import retrofit2.Response;
 /**
  * Created by Juan PC
  */
-public class DetailMovieFragment extends Fragment implements Callback<ListTrailer>,OnTrailerClickListener {
+public class DetailMovieFragment extends BaseFragment implements Callback<ListTrailer>,OnTrailerClickListener {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -109,7 +102,7 @@ public class DetailMovieFragment extends Fragment implements Callback<ListTraile
         rvComplexDetail=(RecyclerView) rootView.findViewById(R.id.rvComplexDetail);
         rvComplexDetail.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvComplexDetail.setHasFixedSize(true);
-        mainMovieRecyclerViewAdapter=new MainMovieRecyclerViewAdapter(listGeneric,getActivity(),mCallbacks);
+        mainMovieRecyclerViewAdapter=new MainMovieRecyclerViewAdapter(listGeneric,getActivity(),mCallbacks,this);
         rvComplexDetail.setAdapter(mainMovieRecyclerViewAdapter);
 
         Call<ListTrailer> call;

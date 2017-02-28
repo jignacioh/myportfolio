@@ -47,7 +47,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
 
     private RecyclerView rvMovies;
     private SwipeRefreshLayout swipeContainer;
-    private FloatingActionButton fab,fabPopular,fabRated;
+    private FloatingActionButton fab,fabPopular,fabRated,fabFavorite;
     private TextView tvType;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
     private LinearLayout llMessage;
@@ -63,7 +63,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
 
     private int idTypeSort;
     private Boolean isFabOpen = false;
-
+    private TextView tvMessage;
 
 
     // TODO: Customize parameter initialization
@@ -93,8 +93,10 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
             fab.startAnimation(rotate_backward);
             fabPopular.startAnimation(fab_close);
             fabRated.startAnimation(fab_close);
+            fabFavorite.startAnimation(fab_close);
             fabPopular.setClickable(false);
             fabRated.setClickable(false);
+            fabFavorite.setClickable(false);
             isFabOpen = false;
 
         } else {
@@ -102,8 +104,10 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
             fab.startAnimation(rotate_forward);
             fabPopular.startAnimation(fab_open);
             fabRated.startAnimation(fab_open);
+            fabFavorite.startAnimation(fab_open);
             fabPopular.setClickable(true);
             fabRated.setClickable(true);
+            fabFavorite.setClickable(true);
             isFabOpen = true;
 
         }
@@ -119,9 +123,11 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         fab = (FloatingActionButton)view.findViewById(R.id.fab);
         fabPopular = (FloatingActionButton)view.findViewById(R.id.fabPopular);
         fabRated = (FloatingActionButton)view.findViewById(R.id.fabRated);
+        fabFavorite=(FloatingActionButton)view.findViewById(R.id.fabFavorite);
         tvType=(TextView)view.findViewById(R.id.tvType);
         llMessage=(LinearLayout) view.findViewById(R.id.llMessage);
         btReload=(Button) view.findViewById(R.id.btRetry);
+        tvMessage=(TextView)view.findViewById(R.id.tvMessage);
 
         fab_open = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.fab_close);
@@ -130,6 +136,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         fab.setOnClickListener(this);
         fabPopular.setOnClickListener(this);
         fabRated.setOnClickListener(this);
+        fabFavorite.setOnClickListener(this);
         btReload.setOnClickListener(this);
 
         rvMovies= (RecyclerView) view.findViewById(R.id.rvMovies);
@@ -203,16 +210,22 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
 
     @Override
     public void onFailure(Call<ListMovie> call, Throwable t) {
+
         swipeContainer.setRefreshing(false);
         tvType.setVisibility(View.GONE);
         rvMovies.setVisibility(View.GONE);
         llMessage.setVisibility(View.VISIBLE);
+        tvMessage.setText(getString(R.string.msg_no_internet));
+        btReload.setVisibility(View.VISIBLE);
+
     }
     private void changeTypeSortText() {
         if (idTypeSort==R.id.fabPopular){
-            tvType.setText(getResources().getString(R.string.lb_popular));
+            tvType.setText(getString(R.string.lb_popular));
         }else if (idTypeSort==R.id.fabRated){
-            tvType.setText(getResources().getString(R.string.lb_rated));
+            tvType.setText(getString(R.string.lb_rated));
+        }else if (idTypeSort==R.id.fabFavorite){
+            tvType.setText(getString(R.string.lb_favorite));
         }
     }
     @Override
@@ -227,6 +240,8 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         }else
         if (view.getId()==R.id.fab){
             animateFAB();
+        }else if(view.getId()==R.id.fabFavorite){
+            loadFavorites();
         }else {
             idTypeSort = view.getId();
             sortByPreference(idTypeSort);
@@ -257,6 +272,29 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
             tvType.setVisibility(View.GONE);
             rvMovies.setVisibility(View.GONE);
             llMessage.setVisibility(View.VISIBLE);
+            tvMessage.setText(getString(R.string.msg_no_internet));
+            btReload.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void loadFavorites() {
+        listMovies.clear();
+        listMovies=getFavoritesMovies();
+        if (listMovies!=null && listMovies.size()!=0){
+            tvType.setVisibility(View.VISIBLE);
+            rvMovies.setVisibility(View.VISIBLE);
+            swipeContainer.setRefreshing(false);
+            mrvAdapter = new MovieRecyclerViewAdapter(getContext(),mCallbacks, listMovies);
+            rvMovies.setItemAnimator(new DefaultItemAnimator());
+            rvMovies.setAdapter(mrvAdapter);
+            tvType.setText(getString(R.string.lb_favorite));
+        }else{
+            swipeContainer.setRefreshing(false);
+            tvType.setVisibility(View.GONE);
+            rvMovies.setVisibility(View.GONE);
+            llMessage.setVisibility(View.VISIBLE);
+            tvMessage.setText(getString(R.string.lb_popular));
+            btReload.setVisibility(View.GONE);
         }
     }
 

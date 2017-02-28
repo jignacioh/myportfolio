@@ -9,12 +9,13 @@
 
     <string name="msg_no_internet">Check your connection and try again</string>
 
+    <string name="lb_not_store_favorite">You dont have any favorites yet</string>
     <string name="bt_retry">Retry</string>
 
     <string name="lb_my_movies">My Movies</string>
     <string name="lb_all">All</string>
     <string name="lb_popular">Most Popular</string>
     <string name="lb_rated">High Rated</string>
-
+    <string name="lb_favorite">Favorite</string>
     <string name="lb_title_general">Error</string>
 </resources>
