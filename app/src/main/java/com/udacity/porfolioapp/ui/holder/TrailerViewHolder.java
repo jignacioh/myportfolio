@@ -2,13 +2,11 @@ package com.udacity.porfolioapp.ui.holder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.udacity.porfolioapp.R;
-import com.udacity.porfolioapp.fragment.DetailMovieFragment;
+import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
 
 import java.util.ArrayList;
 
@@ -18,11 +16,11 @@ import java.util.ArrayList;
 
 public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-    private final DetailMovieFragment.Callbacks mCallbacks;
+    private final DetailsMovieFragment.Callbacks mCallbacks;
     public TextView tvTrailer;
     public LinearLayout llHeaderTittle;
     private View itemView;
-    public TrailerViewHolder(View itemView, DetailMovieFragment.Callbacks mCallbacks) {
+    public TrailerViewHolder(View itemView, DetailsMovieFragment.Callbacks mCallbacks) {
         super(itemView);
         this.itemView=itemView;
         this.mCallbacks=mCallbacks;

@@ -9,17 +9,14 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.udacity.porfolioapp.R;
-import com.udacity.porfolioapp.fragment.DetailMovieFragment;
-import com.udacity.porfolioapp.model.Movie;
-
-import java.util.ArrayList;
+import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
 
 /**
  * Created by jhurtace on 31/01/2017.
  */
 public class DetailMovieHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener{
 
-    private DetailMovieFragment.Callbacks mCallbacks;
+    private DetailsMovieFragment.Callbacks mCallbacks;
     private View view;
     private ToggleButton ivAddFavo;
     private ImageView ivPoster;
@@ -29,7 +26,7 @@ public class DetailMovieHolder extends RecyclerView.ViewHolder implements Compou
     private TextView tvRatedMovie;
     private TextView tvYearMovie;
 
-    public DetailMovieHolder(View view, DetailMovieFragment.Callbacks mCallbacks){
+    public DetailMovieHolder(View view, DetailsMovieFragment.Callbacks mCallbacks){
         super(view);
         this.view=view;
         this.mCallbacks=mCallbacks;

@@ -1,6 +1,7 @@
 package com.udacity.porfolioapp.service;
 
 import com.udacity.porfolioapp.model.ListMovie;
+import com.udacity.porfolioapp.model.ListReview;
 import com.udacity.porfolioapp.model.ListTrailer;
 
 import retrofit2.Call;
@@ -21,4 +22,6 @@ public interface MovieRestAPI {
     Call<ListMovie> loadHighRatedMovies(@Query("api_key") String apiKey);
     @GET("movie/{movieId}/videos")
     Call<ListTrailer> loadTrailersMovie(@Path("movieId") String movieId, @Query("api_key") String apiKey);
+    @GET("movie/{movieId}/reviews")
+    Call<ListReview> loadReviewsMovie(@Path("movieId") String movieId, @Query("api_key") String apiKey);
 }

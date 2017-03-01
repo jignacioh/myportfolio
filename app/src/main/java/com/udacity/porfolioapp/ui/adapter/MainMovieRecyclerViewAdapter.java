@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.udacity.porfolioapp.R;
-import com.udacity.porfolioapp.fragment.DetailMovieFragment;
+import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
 import com.udacity.porfolioapp.model.Movie;
 import com.udacity.porfolioapp.model.MovieDao;
 import com.udacity.porfolioapp.model.Trailer;
@@ -26,8 +26,8 @@ import java.util.List;
 public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final String BASE_IMAGE="http://image.tmdb.org/t/p/w500/";
-    private DetailMovieFragment detailMovieFragment;
-    private DetailMovieFragment.Callbacks mCallbacks;
+    private DetailsMovieFragment detailMovieFragment;
+    private DetailsMovieFragment.Callbacks mCallbacks;
     private Context context;
     // The items to display in your RecyclerView
     private List<Object> items;
@@ -35,7 +35,7 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     private final int DETAIL = 0, TRAILER = 1;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MainMovieRecyclerViewAdapter(List<Object> items, Context context, DetailMovieFragment.Callbacks mCallbacks, DetailMovieFragment detailMovieFragment) {
+    public MainMovieRecyclerViewAdapter(List<Object> items, Context context, DetailsMovieFragment.Callbacks mCallbacks, DetailsMovieFragment detailMovieFragment) {
         this.items = items;
         this.context=context;
         this.mCallbacks=mCallbacks;

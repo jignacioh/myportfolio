@@ -5,6 +5,45 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.udacity.porfolioapp.fragment.DetailMovieFragment">
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/rdbDetail"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:button="@null"
+            android:clickable="true"
+            android:background="@drawable/drawable_left_item"
+            android:text="DETAIL"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="@drawable/drawable_text_item"
+            android:layout_height="wrap_content" />
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/rdbReview"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:button="@null"
+            android:clickable="true"
+            android:background="@drawable/drawable_right_item"
+            android:textColor="@drawable/drawable_text_item"
+            android:text="REVIEWS"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_height="wrap_content" />
+    </RadioGroup>
+    <FrameLayout
+        android:id="@+id/flContentBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvComplexDetail"
         android:layout_width="match_parent"

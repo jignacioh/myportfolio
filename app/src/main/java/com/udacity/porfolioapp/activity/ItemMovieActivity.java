@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailMovieFragment;
+import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
 import com.udacity.porfolioapp.model.DaoSession;
 import com.udacity.porfolioapp.model.Movie;
 import com.udacity.porfolioapp.model.Trailer;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by Juan PC
  */
-public class ItemMovieActivity extends AppCompatActivity implements  DetailMovieFragment.Callbacks{
+public class ItemMovieActivity extends AppCompatActivity implements  DetailsMovieFragment.Callbacks{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +75,9 @@ public class ItemMovieActivity extends AppCompatActivity implements  DetailMovie
 
     @Override
     public void onItemCheckFavorite(boolean isFavorite) {
-        Movie movie = (Movie) getIntent().getParcelableExtra(DetailMovieFragment.ARG_ITEM_MOVIE);
+        Movie movie = getIntent().getParcelableExtra(DetailMovieFragment.ARG_ITEM_MOVIE);
         if (isFavorite){
-            long movie_id = getAppDaoSession().getMovieDao().insertOrReplace(movie);
+           getAppDaoSession().getMovieDao().insertOrReplace(movie);
             Log.i("OK"," insert");
         }else {
             Log.i("OK","remove");
