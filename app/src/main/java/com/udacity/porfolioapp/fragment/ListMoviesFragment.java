@@ -3,6 +3,7 @@ package com.udacity.porfolioapp.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -37,7 +38,7 @@ import retrofit2.Response;
 /**
  * Created by Juan PC
  */
-public class ListMoviesFragment extends BaseFragment implements Callback<ListMovie>,OnMovieClickListener,View.OnClickListener {
+public class ListMoviesFragment extends BaseFragment implements Callback<ListMovie>,View.OnClickListener {
 
     // TODO: Customize parameter argument names
     public static final String ARG_COLUMN_COUNT = "column-count";
@@ -56,7 +57,6 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
     private Callbacks mCallbacks ;
     private List<Movie> listMovies;
     private MovieRestAPI apiService;
-    private OnListFragmentInteractionListener mListener;
     private MovieRecyclerViewAdapter mrvAdapter;
 
     private int mColumnCount = 2;
@@ -75,6 +75,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,12 +113,21 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
 
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listmovies_list, container, false);
+        setRetainInstance(true);
+        if (savedInstanceState==null){
+            listMovies=new ArrayList<>();
+            idTypeSort=TYPE_POPULAR_MOVIES;
+        }else {
+            listMovies=savedInstanceState.getParcelableArrayList("movies");
+            idTypeSort=savedInstanceState.getInt("type");
+        }
         apiService = ApiClient.getClient().create(MovieRestAPI.class);
-        idTypeSort=TYPE_POPULAR_MOVIES;
+
         Context context = view.getContext();
 
         fab = (FloatingActionButton)view.findViewById(R.id.fab);
@@ -140,14 +150,13 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         btReload.setOnClickListener(this);
 
         rvMovies= (RecyclerView) view.findViewById(R.id.rvMovies);
-        if (mColumnCount <= 1) {
-            rvMovies.setLayoutManager(new LinearLayoutManager(context));
-        } else {
+        if (getBoolean(R.bool.isTablet)){
+            rvMovies.setLayoutManager(new GridLayoutManager(context, getNumberRowsTabletOrientation()));
+        }else {
             rvMovies.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
 
 
-        listMovies=new ArrayList<>();
         swipeContainer=(SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         rvMovies.setHasFixedSize(true);
 
@@ -159,29 +168,25 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
             });
         swipeContainer.setRefreshing(true);
 
-
-        sortByPreference(TYPE_POPULAR_MOVIES);
+        if (listMovies.size()==0) {
+            sortByPreference(TYPE_POPULAR_MOVIES);
+        }else {
+            tvType.setVisibility(View.VISIBLE);
+            rvMovies.setVisibility(View.VISIBLE);
+            swipeContainer.setRefreshing(false);
+            mrvAdapter = new MovieRecyclerViewAdapter(getContext(),mCallbacks, listMovies);
+            rvMovies.setItemAnimator(new DefaultItemAnimator());
+            rvMovies.setAdapter(mrvAdapter);
+            changeTypeSortText();
+        }
 
         return view;
     }
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        // Restore the previously serialized activated item position.
 
-        /*if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
-        }*/
-    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
+
         if (!(context instanceof Callbacks)) {
             throw new IllegalStateException("Activity must implement fragment's callbacks.");
         }
@@ -191,7 +196,6 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -228,10 +232,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
             tvType.setText(getString(R.string.lb_favorite));
         }
     }
-    @Override
-    public void onMovieClick(int position) {
-        mListener.onFragmentInteraction(Uri.parse(ListMoviesFragment.class.getSimpleName()),listMovies.get(position));
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -298,11 +299,6 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         }
     }
 
-
-    public interface OnListFragmentInteractionListener {
-
-        public void onFragmentInteraction(Uri uri, Object object);
-    }
     public interface Callbacks {
         public void onItemSelected(ArrayList<Movie> list,int position,View view);
     }
@@ -311,5 +307,12 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("movies", (ArrayList<? extends Parcelable>) listMovies);
+        outState.putInt("type",idTypeSort);
+        super.onSaveInstanceState(outState);
     }
 }

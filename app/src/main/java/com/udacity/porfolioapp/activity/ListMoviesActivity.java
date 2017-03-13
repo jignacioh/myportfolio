@@ -30,13 +30,11 @@ import retrofit2.Response;
 /**
  * Created by Juan PC
  */
-public class ListMoviesActivity extends AppCompatActivity implements Callback<ListMovie>, ListMoviesFragment.Callbacks,ListMoviesFragment.OnListFragmentInteractionListener  {
-    private GridLayoutManager lLayout;
-    private RecyclerView rvMovies;
-    private SwipeRefreshLayout swipeContainer;
-    private List<Movie> listMovies;
+public class ListMoviesActivity extends AppCompatActivity implements ListMoviesFragment.Callbacks  {
 
     private boolean mTwoPane=false;
+    public static final String ARG_FRAG_LIST="ListMovieFragment";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +46,17 @@ public class ListMoviesActivity extends AppCompatActivity implements Callback<Li
             mTwoPane = true;
             Bundle bundle=new Bundle();
             bundle.putInt(ListMoviesFragment.ARG_COLUMN_COUNT,3);
+            attachFragment(savedInstanceState,bundle);
+        }
+
+    }
+    private void attachFragment(Bundle savedInstanceState, Bundle bundle) {
+        if (savedInstanceState == null) {
             ListMoviesFragment fragment = new ListMoviesFragment();
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.main_view, fragment).commit();
+                    .add(R.id.main_view, fragment,ARG_FRAG_LIST).commit();
         }
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -63,33 +66,13 @@ public class ListMoviesActivity extends AppCompatActivity implements Callback<Li
         }
         return super.onOptionsItemSelected(item);
     }
-    @Override
-    public void onResponse(Call<ListMovie> call, Response<ListMovie> response) {
-
-    }
-
-    @Override
-    public void onFailure(Call<ListMovie> call, Throwable t) {
-        rvMovies.setVisibility(View.GONE);
-    }
-
-
-    @Override
-    public void onFragmentInteraction(Uri uri, Object object) {
-        if (uri == Uri.parse(ListMoviesFragment.class.getSimpleName())) {
-
-        }
-    }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onItemSelected(ArrayList<Movie> list, int position,View view) {
         if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putParcelable(DetailMovieFragment.ARG_ITEM_MOVIE, (Parcelable) list.get(position));
+            arguments.putParcelable(DetailMovieFragment.ARG_ITEM_MOVIE,  list.get(position));
             DetailMovieFragment fragment = new DetailMovieFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, fragment).commit();
@@ -115,12 +98,12 @@ public class ListMoviesActivity extends AppCompatActivity implements Callback<Li
                 Intent intentD = new Intent(this, ItemMovieActivity.class);
                 Pair<View, String> pair1 = Pair.create(view, view.getTransitionName());
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, view.getTransitionName());
-                intentD.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,(Parcelable) list.get(position));
+                intentD.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,list.get(position));
                 startActivity(intentD, options.toBundle());
             }
             else {
                 Intent detailIntent = new Intent(this, ItemMovieActivity.class);
-                detailIntent.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,(Parcelable) list.get(position));
+                detailIntent.putExtra(DetailMovieFragment.ARG_ITEM_MOVIE,list.get(position));
                 startActivity(detailIntent);
             }
         }

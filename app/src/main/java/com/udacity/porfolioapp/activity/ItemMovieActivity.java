@@ -11,16 +11,19 @@ import android.view.View;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailMovieFragment;
 import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
+import com.udacity.porfolioapp.fragment.ReviewsMovieFragment;
 import com.udacity.porfolioapp.model.DaoSession;
 import com.udacity.porfolioapp.model.Movie;
+import com.udacity.porfolioapp.model.Review;
 import com.udacity.porfolioapp.model.Trailer;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * Created by Juan PC
  */
-public class ItemMovieActivity extends AppCompatActivity implements  DetailsMovieFragment.Callbacks{
+public class ItemMovieActivity extends AppCompatActivity implements  DetailsMovieFragment.Callbacks,ReviewsMovieFragment.Callbacks{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,5 +89,13 @@ public class ItemMovieActivity extends AppCompatActivity implements  DetailsMovi
     }
     private DaoSession getAppDaoSession() {
         return ((BaseContextApplication)getApplication()).getDaoSession();
+    }
+
+    @Override
+    public void onReviewSelected(ArrayList<Object> list, int position, View view) {
+        Review review= (Review) list.get(position);
+        Intent intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(review.getUrl()));
+        startActivity(intent);
     }
 }
