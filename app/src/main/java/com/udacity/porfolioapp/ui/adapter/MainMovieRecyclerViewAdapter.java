@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final String BASE_IMAGE="http://image.tmdb.org/t/p/w500/";
+    public static final String BASE_IMAGE="http://image.tmdb.org/t/p/w300/";
     private DetailsMovieFragment detailMovieFragment;
     private DetailsMovieFragment.Callbacks mCallbacks;
     private Context context;
@@ -114,7 +114,7 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 detailMovieHolder.getIvPoster().setTransitionName("profile");
             }
-            Glide.with(context).load(BASE_IMAGE+movie.getUrlMovie()).placeholder(R.drawable.placeholder).crossFade().into(  detailMovieHolder.getIvPoster());
+            Glide.with(context).load(BASE_IMAGE+movie.getImageMovie()).placeholder(R.drawable.placeholder).crossFade().into(  detailMovieHolder.getIvPoster());
             detailMovieHolder.getTvPopularityMovie().setText(context.getString(R.string.lb_popularity)+movie.getPopularity());
             detailMovieHolder.getTvRatedMovie().setText(context.getString(R.string.lb_rated_detail)+movie.getVoteAverage());
             detailMovieHolder.getTvVotosMovie().setText(context.getString(R.string.lb_voted)+movie.getVoteCount());

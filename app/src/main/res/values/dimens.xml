@@ -12,4 +12,5 @@
     <dimen name="text_size">20sp</dimen>
 
     <integer name="gallery_columns">2</integer>
+    <dimen name="dimen_height_detail_movie">200dp</dimen>
 </resources>

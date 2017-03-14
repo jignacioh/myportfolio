@@ -1,36 +1,25 @@
 package com.udacity.porfolioapp.activity;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailMovieFragment;
+import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
 import com.udacity.porfolioapp.fragment.ListMoviesFragment;
-import com.udacity.porfolioapp.model.ListMovie;
 import com.udacity.porfolioapp.model.Movie;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 /**
  * Created by Juan PC
  */
-public class ListMoviesActivity extends AppCompatActivity implements ListMoviesFragment.Callbacks  {
+public class ListMoviesActivity extends AppCompatActivity implements ListMoviesFragment.Callbacks,DetailsMovieFragment.Callbacks{
 
     private boolean mTwoPane=false;
     public static final String ARG_FRAG_LIST="ListMovieFragment";
@@ -67,7 +56,6 @@ public class ListMoviesActivity extends AppCompatActivity implements ListMoviesF
         return super.onOptionsItemSelected(item);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onItemSelected(ArrayList<Movie> list, int position,View view) {
         if (mTwoPane) {
@@ -107,5 +95,15 @@ public class ListMoviesActivity extends AppCompatActivity implements ListMoviesF
                 startActivity(detailIntent);
             }
         }
+    }
+
+    @Override
+    public void onTrailerSelected(ArrayList<Object> list, int position, View view) {
+
+    }
+
+    @Override
+    public void onItemCheckFavorite(boolean isFavorite) {
+
     }
 }

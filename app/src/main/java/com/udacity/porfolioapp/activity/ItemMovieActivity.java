@@ -18,7 +18,6 @@ import com.udacity.porfolioapp.model.Review;
 import com.udacity.porfolioapp.model.Trailer;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 /**
  * Created by Juan PC
@@ -67,7 +66,7 @@ public class ItemMovieActivity extends AppCompatActivity implements  DetailsMovi
     }
 
     @Override
-    public void onItemSelected(ArrayList<Object> list, int position, View view) {
+    public void onTrailerSelected(ArrayList<Object> list, int position, View view) {
         Trailer trailer= (Trailer) list.get(position);
 
         Intent i = new Intent(Intent.ACTION_VIEW);

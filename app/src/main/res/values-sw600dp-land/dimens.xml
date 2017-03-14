@@ -1,0 +1,6 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <integer name="gallery_columns">3</integer>
+    <dimen name="dimen_height_detail_movie">500dp</dimen>
+    
+</resources>

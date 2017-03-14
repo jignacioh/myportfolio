@@ -14,7 +14,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:layout_alignParentTop="true"
-        android:layout_height="200dp" />
+        android:layout_height="@dimen/dimen_height_detail_movie" />
 
     <LinearLayout
         android:id="@+id/llHeaderTittle"

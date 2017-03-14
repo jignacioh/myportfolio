@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +35,9 @@ public class DetailsMovieFragment extends BaseFragment implements Callback<ListT
          * The fragment argument representing the item ID that this fragment
          * represents.
          */
-        public static final String ARG_ITEM_ID = "item_id";
         public static final String ARG_ITEM_MOVIE = "movie";
+        public static final String ARG_LIST_TRAILER="list";
+        public static final String ARG_MOVIE="movie";
         private Callbacks mCallbacks ;
         private MovieRestAPI apiService;
         /**
@@ -63,7 +63,6 @@ public class DetailsMovieFragment extends BaseFragment implements Callback<ListT
 
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,14 +71,12 @@ public class DetailsMovieFragment extends BaseFragment implements Callback<ListT
             movie = getArguments().getParcelable(ARG_ITEM_MOVIE);
         }
     }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable("movie",movie);
-        outState.putParcelableArrayList("list", (ArrayList<? extends Parcelable>) lTrailerList);
+        outState.putParcelable(ARG_MOVIE,movie);
+        outState.putParcelableArrayList(ARG_LIST_TRAILER, (ArrayList<? extends Parcelable>) lTrailerList);
         super.onSaveInstanceState(outState);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)  {
@@ -99,19 +96,16 @@ public class DetailsMovieFragment extends BaseFragment implements Callback<ListT
 
 
         if (savedInstanceState==null){
-            Log.i("OnSavedInstance","NULL");
             listGeneric.add(movie);
             if (NetworkUtil.isOnline(getContext())) {
                 //swipeContainer.setRefreshing(true);
                 pbLoadTrailer.setVisibility(View.VISIBLE);
                 call = apiService.loadTrailersMovie(movie.getId()+"",ApiClient.TAG_API);
                 call.enqueue(DetailsMovieFragment.this);
-
             }
         }else {
-            Log.i("OnSavedInstance","NOT NULL");
-            movie=savedInstanceState.getParcelable("movie");
-            lTrailerList=savedInstanceState.getParcelableArrayList("list");
+            movie=savedInstanceState.getParcelable(ARG_MOVIE);
+            lTrailerList=savedInstanceState.getParcelableArrayList(ARG_LIST_TRAILER);
             listGeneric.add(movie);
             listGeneric.addAll(lTrailerList);
         }
@@ -127,24 +121,21 @@ public class DetailsMovieFragment extends BaseFragment implements Callback<ListT
         lTrailerList.clear();
         lTrailerList=response.body().trailerList;
         listGeneric.addAll(lTrailerList);
-        mainMovieRecyclerViewAdapter.notifyDataSetChanged();
+        mainMovieRecyclerViewAdapter=new MainMovieRecyclerViewAdapter(listGeneric,getActivity(),mCallbacks,this);
+        rvComplexDetail.setAdapter(mainMovieRecyclerViewAdapter);
 
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mCallbacks = (DetailsMovieFragment.Callbacks) context;
     }
-
     @Override
     public void onFailure(Call<ListTrailer> call, Throwable t) {
         pbLoadTrailer.setVisibility(View.GONE);
     }
-
     public interface Callbacks {
-        void onItemSelected(ArrayList<Object> list,int position,View view);
+        void onTrailerSelected(ArrayList<Object> list,int position,View view);
         void onItemCheckFavorite(boolean isFavorite);
     }
-
 }
