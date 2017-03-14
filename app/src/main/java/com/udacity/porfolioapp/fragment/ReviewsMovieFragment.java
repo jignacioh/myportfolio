@@ -90,6 +90,7 @@ public class ReviewsMovieFragment extends BaseFragment implements Callback<ListR
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_review, container, false);
+        setRetainInstance(true);
         apiService= ApiClient.getClient().create(MovieRestAPI.class);
         llMessageNoInternet=(LinearLayout) rootView.findViewById(R.id.llMessageNoConection);
         llMessageNoReview=(LinearLayout) rootView.findViewById(R.id.llMessageNoReviews);

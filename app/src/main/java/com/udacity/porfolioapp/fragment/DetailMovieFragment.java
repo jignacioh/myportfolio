@@ -45,8 +45,8 @@ public class DetailMovieFragment extends BaseFragment implements CompoundButton.
     private RadioButton rdbDetail,rdbReview;
 
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
 
 
     public DetailMovieFragment() {
@@ -64,13 +64,15 @@ public class DetailMovieFragment extends BaseFragment implements CompoundButton.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-
+        setRetainInstance(true);
         rdbDetail=(RadioButton)rootView.findViewById(R.id.rdbDetail);
         rdbReview=(RadioButton)rootView.findViewById(R.id.rdbReview);
 
 
         rdbDetail.setOnCheckedChangeListener(this);
         rdbReview.setOnCheckedChangeListener(this);
+
+        rdbDetail.setChecked(true);
 
         return rootView;
     }

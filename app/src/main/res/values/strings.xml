@@ -21,4 +21,10 @@
     <string name="lb_title_general">Error</string>
 
     <string name="lb_read_more"><u><font color='blue'>Read more</font></u></string>
+
+    <string name="lb_popularity">Popularity: </string>
+    <string name="lb_rated_detail">"Rated: </string>
+    <string name="lb_voted">Votes: </string>
+    <string name="lb_release">Release date: </string>
+    <string name="lb_summary">Summary: </string>
 </resources>

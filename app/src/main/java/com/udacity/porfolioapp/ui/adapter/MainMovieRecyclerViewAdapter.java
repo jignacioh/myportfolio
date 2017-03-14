@@ -115,11 +115,11 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                 detailMovieHolder.getIvPoster().setTransitionName("profile");
             }
             Glide.with(context).load(BASE_IMAGE+movie.getUrlMovie()).placeholder(R.drawable.placeholder).crossFade().into(  detailMovieHolder.getIvPoster());
-            detailMovieHolder.getTvPopularityMovie().setText("Popularity: "+movie.getPopularity());
-            detailMovieHolder.getTvRatedMovie().setText("Rated: "+movie.getVoteAverage());
-            detailMovieHolder.getTvVotosMovie().setText("Votes: "+movie.getVoteCount());
-            detailMovieHolder.getTvYearMovie().setText("Release date: "+movie.getYearMovie());
-            detailMovieHolder.getTvSummaryMovie().setText("Summary: "+movie.getDescriptionMovie());
+            detailMovieHolder.getTvPopularityMovie().setText(context.getString(R.string.lb_popularity)+movie.getPopularity());
+            detailMovieHolder.getTvRatedMovie().setText(context.getString(R.string.lb_rated_detail)+movie.getVoteAverage());
+            detailMovieHolder.getTvVotosMovie().setText(context.getString(R.string.lb_voted)+movie.getVoteCount());
+            detailMovieHolder.getTvYearMovie().setText(context.getString(R.string.lb_release)+movie.getYearMovie());
+            detailMovieHolder.getTvSummaryMovie().setText(context.getString(R.string.lb_summary)+movie.getDescriptionMovie());
         }
         QueryBuilder<Movie> movieQueryBuilder=detailMovieFragment.getAppDaoSession().getMovieDao().queryBuilder();
         if (movieQueryBuilder.where(MovieDao.Properties.Id.eq(movie.getId())).count()!=0){
