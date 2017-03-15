@@ -4,11 +4,11 @@
 
 general:
     artifacts:
-        - C:\Users\jhurtace\Documents\Repo\Android\myportfolio\app\build\outputs\apk
+        - /home/ubuntu/myportfolio/app/build/outputs/apk
 
 machine:
     environment:
-        ANDROID_HOME: C:\Users\jhurtace\AppData\Local\Android\Sdk
+        ANDROID_HOME: /usr/local/android-sdk-linux
 
 dependencies:
     pre:
@@ -19,7 +19,7 @@ dependencies:
         - echo y | android update sdk --no-ui --all --filter "extra-android-support"
     override:
         - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-24.0.3,android-24,extra-google-m2repository,extra-google-google_play_services,extra-android-support
-        - ANDROID_HOME=C:\Users\jhurtace\AppData\Local\Android\Sdk ./gradlew dependencies
+        - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
 test:
     override:
