@@ -21,6 +21,7 @@
         <!--activity android:name=".activity.ListMoviesActivity" /-->
         <activity
             android:name=".activity.ItemMovieActivity"
+            android:configChanges="screenSize"
             android:label="@string/title_activity_item_movie"></activity>
     </application>
 
