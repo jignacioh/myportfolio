@@ -29,6 +29,8 @@ public class DetailMovieFragment extends BaseFragment implements CompoundButton.
     public static final String ARG_ITEM_ID = "item_id";
     public static final String ARG_ITEM_MOVIE = "movie";
     public static final String BASE_IMAGE="http://image.tmdb.org/t/p/w500/";
+    public static final String ARG_CHECK_REVIEW = "checkreview";
+    public static final String ARG_CHECK_DETAIL = "checkdetail";
 
     private List<Trailer> listTrailer;
     private MovieRestAPI apiService;
@@ -47,7 +49,7 @@ public class DetailMovieFragment extends BaseFragment implements CompoundButton.
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-
+    private boolean checkDetail=true,checkReview=false;
 
     public DetailMovieFragment() {
     }
@@ -58,6 +60,11 @@ public class DetailMovieFragment extends BaseFragment implements CompoundButton.
 
         if (getArguments().containsKey(ARG_ITEM_MOVIE)) {
             movie = getArguments().getParcelable(ARG_ITEM_MOVIE);
+        }
+        if (savedInstanceState!=null){
+            checkDetail=savedInstanceState.getBoolean(ARG_CHECK_DETAIL);
+            checkReview=savedInstanceState.getBoolean(ARG_CHECK_REVIEW);
+            movie=savedInstanceState.getParcelable(ARG_ITEM_MOVIE);
         }
     }
 
@@ -72,7 +79,11 @@ public class DetailMovieFragment extends BaseFragment implements CompoundButton.
         rdbDetail.setOnCheckedChangeListener(this);
         rdbReview.setOnCheckedChangeListener(this);
 
-        rdbDetail.setChecked(true);
+        if (checkDetail) {
+            rdbDetail.setChecked(checkDetail);
+        }else {
+            rdbReview.setChecked(checkReview);
+        }
 
         return rootView;
     }
@@ -89,12 +100,25 @@ public class DetailMovieFragment extends BaseFragment implements CompoundButton.
         fragmentTransaction=fragmentManager.beginTransaction();
 
         if (rdbDetail.isChecked()){
+            checkDetail=true;
+            checkReview=false;
             fragment=DetailsMovieFragment.newInstance(movie);
         }else if(rdbReview.isChecked()){
+            checkDetail=false;
+            checkReview=true;
             fragment=ReviewsMovieFragment.newInstance(movie);
         }
         fragmentTransaction.replace(R.id.flContentBody,fragment);
+
         fragmentTransaction.commit();
+
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(ARG_CHECK_REVIEW,checkDetail);
+        outState.putBoolean(ARG_CHECK_DETAIL,checkReview);
+        outState.putParcelable(ARG_ITEM_MOVIE,movie);
+        super.onSaveInstanceState(outState);
+    }
 }

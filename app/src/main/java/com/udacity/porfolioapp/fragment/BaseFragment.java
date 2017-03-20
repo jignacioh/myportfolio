@@ -47,9 +47,10 @@ public class BaseFragment extends Fragment {
     }
     public int getNumberRowsTabletOrientation() {
         if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            return 2;
+            return 1;
         } else{
             return 3;
         }
     }
+
 }

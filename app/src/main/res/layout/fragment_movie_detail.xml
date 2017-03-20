@@ -6,19 +6,24 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     tools:context="com.udacity.porfolioapp.fragment.DetailMovieFragment">
-    <LinearLayout
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="0.2">
         <RadioGroup
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:visibility="visible"
             android:background="@android:color/black"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <RadioButton
                 android:id="@+id/rdbDetail"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
@@ -29,8 +34,9 @@
                 android:gravity="center"
                 android:textSize="18sp"
                 android:textColor="@drawable/drawable_text_item"
-                android:layout_height="wrap_content" />
-            <android.support.v7.widget.AppCompatRadioButton
+                android:layout_height="wrap_content"
+                android:visibility="visible"/>
+            <RadioButton
                 android:id="@+id/rdbReview"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
@@ -43,10 +49,11 @@
                 android:textSize="18sp"
                 android:layout_height="wrap_content" />
         </RadioGroup>
-    </LinearLayout>
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/flContentBody"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="0.8"/>
 </LinearLayout>

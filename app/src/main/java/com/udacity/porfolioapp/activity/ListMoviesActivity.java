@@ -1,43 +1,82 @@
 package com.udacity.porfolioapp.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailMovieFragment;
 import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
 import com.udacity.porfolioapp.fragment.ListMoviesFragment;
+import com.udacity.porfolioapp.fragment.ReviewsMovieFragment;
+import com.udacity.porfolioapp.model.DaoSession;
 import com.udacity.porfolioapp.model.Movie;
+import com.udacity.porfolioapp.model.Review;
+import com.udacity.porfolioapp.model.Trailer;
 
 import java.util.ArrayList;
 /**
  * Created by Juan PC
  */
-public class ListMoviesActivity extends AppCompatActivity implements ListMoviesFragment.Callbacks,DetailsMovieFragment.Callbacks{
+public class ListMoviesActivity extends AppCompatActivity implements ListMoviesFragment.Callbacks,DetailsMovieFragment.Callbacks,ReviewsMovieFragment.Callbacks{
 
     private boolean mTwoPane=false;
     public static final String ARG_FRAG_LIST="ListMovieFragment";
+    public static final String ARG_MOVIE_SELECTED="movieSelected";
+    private FrameLayout frameLayoutMainView,frameLayoutDetailContainer;
+    private Movie movieSelected;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_movies);
+        if (savedInstanceState!=null){
+            movieSelected=savedInstanceState.getParcelable(ARG_MOVIE_SELECTED);
+        }
         getSupportActionBar().setTitle(getResources().getString(R.string.lb_my_movies));
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         if (findViewById(R.id.movie_detail_container) != null) {
             mTwoPane = true;
             Bundle bundle=new Bundle();
-            bundle.putInt(ListMoviesFragment.ARG_COLUMN_COUNT,3);
+            bundle.putInt(ListMoviesFragment.ARG_COLUMN_COUNT,getResources().getInteger(R.integer.gallery_columns));
             attachFragment(savedInstanceState,bundle);
         }
+        if (getResources().getBoolean(R.bool.isTablet)){
+            frameLayoutMainView=(FrameLayout)findViewById(R.id.main_view);
+            frameLayoutDetailContainer=(FrameLayout)findViewById(R.id.movie_detail_container);
+            if (isOrientationHorizontal(Configuration.ORIENTATION_LANDSCAPE)){
+                frameLayoutMainView.setLayoutParams(new
+                        LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT, 2));
+                frameLayoutDetailContainer.setLayoutParams(new
+                        LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT, 2));
+            }else {
+                frameLayoutMainView.setLayoutParams(new
+                        LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT, 0.3f));
+                frameLayoutDetailContainer.setLayoutParams(new
+                        LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT, 0.66f));
+            }
+        }
+    }
 
+    public boolean isOrientationHorizontal(int orientation) {
+        if(getResources().getConfiguration().orientation == orientation){
+            return true;
+        } else{
+            return false;
+        }
     }
     private void attachFragment(Bundle savedInstanceState, Bundle bundle) {
         if (savedInstanceState == null) {
@@ -58,6 +97,7 @@ public class ListMoviesActivity extends AppCompatActivity implements ListMoviesF
 
     @Override
     public void onItemSelected(ArrayList<Movie> list, int position,View view) {
+        movieSelected = list.get(position);
         if (mTwoPane) {
             Bundle arguments = new Bundle();
             arguments.putParcelable(DetailMovieFragment.ARG_ITEM_MOVIE,  list.get(position));
@@ -99,11 +139,39 @@ public class ListMoviesActivity extends AppCompatActivity implements ListMoviesF
 
     @Override
     public void onTrailerSelected(ArrayList<Object> list, int position, View view) {
+        Trailer trailer= (Trailer) list.get(position);
 
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse("https://www.youtube.com/watch?v="+ trailer.getKey()));
+        startActivity(i);
     }
 
     @Override
     public void onItemCheckFavorite(boolean isFavorite) {
 
+        if (isFavorite){
+            getAppDaoSession().getMovieDao().insertOrReplace(movieSelected);
+            Log.i("OK"," insert");
+        }else {
+            Log.i("OK","remove");
+            getAppDaoSession().getMovieDao().deleteByKey(movieSelected.getId());
+        }
+    }
+
+    @Override
+    public void onReviewSelected(ArrayList<Object> list, int position, View view) {
+        Review review= (Review) list.get(position);
+        Intent intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(review.getUrl()));
+        startActivity(intent);
+    }
+    private DaoSession getAppDaoSession() {
+        return ((BaseContextApplication)getApplication()).getDaoSession();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(ARG_MOVIE_SELECTED,movieSelected);
+        super.onSaveInstanceState(outState);
     }
 }

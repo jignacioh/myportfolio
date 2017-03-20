@@ -2,6 +2,7 @@ package com.udacity.porfolioapp.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,12 +40,10 @@ public class ReviewsMovieFragment extends BaseFragment implements Callback<ListR
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
-    public static final String ARG_ITEM_MOVIE = "movie";
-    public static final String BASE_IMAGE="http://image.tmdb.org/t/p/w500/";
+    public static final String ARG_ITEM_MOVIE = "public";
+    public static final String ARG_LIST_REVIEW ="reviews";
 
     //private DetailMovieFragment.Callbacks mCallbacks ;
-    private List<Trailer> listTrailer;
     private List<Review> listReviews;
     private MovieRestAPI apiService;
     private ReviewsMovieFragment.Callbacks mCallbacks ;
@@ -84,6 +83,10 @@ public class ReviewsMovieFragment extends BaseFragment implements Callback<ListR
         if (getArguments().containsKey(ARG_ITEM_MOVIE)) {
             movie = getArguments().getParcelable(ARG_ITEM_MOVIE);
         }
+        if (savedInstanceState!=null){
+            movie = getArguments().getParcelable(ARG_ITEM_MOVIE);
+            listReviews = getArguments().getParcelableArrayList(ARG_LIST_REVIEW);
+        }
     }
 
     @Nullable
@@ -102,7 +105,9 @@ public class ReviewsMovieFragment extends BaseFragment implements Callback<ListR
         reviewRecyclerViewAdapter=new ReviewRecyclerViewAdapter(listReviews,mCallbacks,getActivity());
         rvReviews.setAdapter(reviewRecyclerViewAdapter);
 
-        fillReviewsList();
+        if (listReviews.size()==0) {
+            fillReviewsList();
+        }
 
         btRetry.setOnClickListener(this);
 
@@ -113,6 +118,8 @@ public class ReviewsMovieFragment extends BaseFragment implements Callback<ListR
         Call<ListReview> call;
         if (NetworkUtil.isOnline(getContext())) {
             pbLoadReview.setVisibility(View.VISIBLE);
+            llMessageNoReview.setVisibility(View.GONE);
+            llMessageNoInternet.setVisibility(View.GONE);
             call = apiService.loadReviewsMovie(movie.getId()+"",ApiClient.TAG_API);
             call.enqueue(ReviewsMovieFragment.this);
 
@@ -166,5 +173,11 @@ public class ReviewsMovieFragment extends BaseFragment implements Callback<ListR
 
     public interface Callbacks {
         public void onReviewSelected(ArrayList<Object> list,int position,View view);
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(ARG_LIST_REVIEW, (ArrayList<? extends Parcelable>) listReviews);
+        outState.putParcelable(ARG_ITEM_MOVIE,movie);
+        super.onSaveInstanceState(outState);
     }
 }

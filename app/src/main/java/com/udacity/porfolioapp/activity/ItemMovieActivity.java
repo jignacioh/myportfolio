@@ -50,7 +50,7 @@ public class ItemMovieActivity extends AppCompatActivity implements  DetailsMovi
             arguments.putParcelable(DetailMovieFragment.ARG_ITEM_MOVIE, getIntent().getParcelableExtra(DetailMovieFragment.ARG_ITEM_MOVIE));
             DetailMovieFragment fragment = new DetailMovieFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, fragment).commit();
         }
     }
 
