@@ -42,9 +42,9 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieViewHold
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        holder.tvNameMovie.setText(movieList.get(position).getNameMovie());
+        holder.getTvNameMovie().setText(movieList.get(position).getNameMovie());
 
-        Glide.with(context).load(baseUrlImage+movieList.get(position).getUrlMovie()).placeholder(R.drawable.placeholder).crossFade().into( holder.ivImageMovie);
+        Glide.with(context).load(baseUrlImage+movieList.get(position).getUrlMovie()).placeholder(R.drawable.placeholder).crossFade().into( holder.getIvImageMovie());
     }
 
     @Override

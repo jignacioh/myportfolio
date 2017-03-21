@@ -26,6 +26,8 @@ import com.udacity.porfolioapp.util.NetworkUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,13 +51,18 @@ public class ReviewsMovieFragment extends BaseFragment implements Callback<ListR
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
+    @BindView(R.id.rvReviews)
+    RecyclerView rvReviews;
+    @BindView(R.id.llMessageNoConection)
+    LinearLayout llMessageNoInternet;
+    @BindView(R.id.llMessageNoReviews)
+    LinearLayout llMessageNoReview;
+    @BindView(R.id.pbLoadReview)
+    ProgressBar pbLoadReview;
+    @BindView(R.id.btRetry)
+    Button btRetry;
 
-    private RecyclerView rvReviews;
     private ReviewRecyclerViewAdapter reviewRecyclerViewAdapter;
-    private LinearLayout llMessageNoInternet;
-    private LinearLayout llMessageNoReview;
-    private ProgressBar pbLoadReview;
-    private Button btRetry;
 
     public static Fragment newInstance(Movie movie) {
         Fragment fragment=new ReviewsMovieFragment();
@@ -83,13 +90,9 @@ public class ReviewsMovieFragment extends BaseFragment implements Callback<ListR
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_review, container, false);
+        ButterKnife.bind(this, rootView);
         setRetainInstance(true);
         apiService= ApiClient.getClient().create(MovieRestAPI.class);
-        llMessageNoInternet=(LinearLayout) rootView.findViewById(R.id.llMessageNoConection);
-        llMessageNoReview=(LinearLayout) rootView.findViewById(R.id.llMessageNoReviews);
-        btRetry=(Button)rootView.findViewById(R.id.btRetry);
-        pbLoadReview=(ProgressBar)rootView.findViewById(R.id.pbLoadReview);
-        rvReviews=(RecyclerView) rootView.findViewById(R.id.rvReviews);
         rvReviews.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvReviews.setHasFixedSize(true);
         reviewRecyclerViewAdapter=new ReviewRecyclerViewAdapter(listReviews,mCallbacks,getActivity());

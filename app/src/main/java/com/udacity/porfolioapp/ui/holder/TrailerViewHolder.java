@@ -10,6 +10,9 @@ import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Juan PC
  */
@@ -17,15 +20,16 @@ import java.util.ArrayList;
 public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     private final DetailsMovieFragment.Callbacks mCallbacks;
-    public TextView tvTrailer;
-    public LinearLayout llHeaderTittle;
+    @BindView(R.id.tvLink)
+    TextView tvTrailer;
+    @BindView(R.id.llTrailerContent)
+    LinearLayout llHeaderTittle;
     private View itemView;
     public TrailerViewHolder(View itemView, DetailsMovieFragment.Callbacks mCallbacks) {
         super(itemView);
+        ButterKnife.bind(this, itemView);
         this.itemView=itemView;
         this.mCallbacks=mCallbacks;
-        tvTrailer = (TextView) itemView.findViewById(R.id.tvLink);
-        llHeaderTittle = (LinearLayout) itemView.findViewById(R.id.llTrailerContent);
         llHeaderTittle.setOnClickListener(this);
     }
 

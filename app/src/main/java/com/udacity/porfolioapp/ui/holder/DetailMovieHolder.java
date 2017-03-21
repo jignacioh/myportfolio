@@ -10,30 +10,34 @@ import android.widget.ToggleButton;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by jhurtace on 31/01/2017.
  */
 public class DetailMovieHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener{
 
     private DetailsMovieFragment.Callbacks mCallbacks;
-    private ToggleButton ivAddFavo;
-    private ImageView ivPoster;
-    private TextView tvPopularityMovie;
-    private TextView tvSummaryMovie;
-    private TextView tvVotosMovie;
-    private TextView tvRatedMovie;
-    private TextView tvYearMovie;
+    @BindView(R.id.ivAddFavo)
+    ToggleButton ivAddFavo;
+    @BindView(R.id.ivDetailMovie)
+    ImageView ivPoster;
+    @BindView(R.id.tvPopularityMovie)
+    TextView tvPopularityMovie;
+    @BindView(R.id.tvSummaryMovie)
+    TextView tvSummaryMovie;
+    @BindView(R.id.tvVotosMovie)
+    TextView tvVotosMovie;
+    @BindView(R.id.tvRatedMovie)
+    TextView tvRatedMovie;
+    @BindView(R.id.tvYearMovie)
+    TextView tvYearMovie;
 
     public DetailMovieHolder(View view, DetailsMovieFragment.Callbacks mCallbacks){
         super(view);
+        ButterKnife.bind(this, view);
         this.mCallbacks=mCallbacks;
-        ivAddFavo=(ToggleButton) view.findViewById(R.id.ivAddFavo);
-        ivPoster=(ImageView) view.findViewById(R.id.ivDetailMovie);
-        tvPopularityMovie=(TextView) view.findViewById(R.id.tvPopularityMovie);
-        tvSummaryMovie=(TextView) view.findViewById(R.id.tvSummaryMovie);
-        tvVotosMovie=(TextView) view.findViewById(R.id.tvVotosMovie);
-        tvRatedMovie=(TextView) view.findViewById(R.id.tvRatedMovie);
-        tvYearMovie=(TextView) view.findViewById(R.id.tvYearMovie);
         ivAddFavo.setOnCheckedChangeListener(this);
     }
     @Override

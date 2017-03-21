@@ -14,6 +14,9 @@ import android.widget.RadioButton;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.model.Movie;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Juan PC
  */
@@ -35,8 +38,10 @@ public class HomeMovieFragment extends BaseFragment implements CompoundButton.On
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-
-    private RadioButton rdbDetail,rdbReview;
+    @BindView(R.id.rdbDetail)
+    RadioButton rdbDetail;
+    @BindView(R.id.rdbReview)
+    RadioButton rdbReview;
 
 
     private FragmentManager fragmentManager;
@@ -63,10 +68,8 @@ public class HomeMovieFragment extends BaseFragment implements CompoundButton.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, null);
+        ButterKnife.bind(this, rootView);
         setRetainInstance(true);
-        rdbDetail=(RadioButton)rootView.findViewById(R.id.rdbDetail);
-        rdbReview=(RadioButton)rootView.findViewById(R.id.rdbReview);
-
 
         rdbDetail.setOnCheckedChangeListener(this);
         rdbReview.setOnCheckedChangeListener(this);

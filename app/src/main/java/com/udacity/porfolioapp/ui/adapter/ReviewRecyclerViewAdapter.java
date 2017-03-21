@@ -42,14 +42,14 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewMovieH
 
     @Override
     public void onBindViewHolder(ReviewMovieHolder holder, int position) {
-        holder.tvDetail.setText(itemList.get(position).getContent());
-        holder.tvAuthor.setText(itemList.get(position).getAuthor());
+        holder.getTvDetail().setText(itemList.get(position).getContent());
+        holder.getTvAuthor().setText(itemList.get(position).getAuthor());
 
 
         String styledText = context.getString(R.string.lb_read_more);
-        holder.tvReadMore.setText(styledText);
-        holder.tvReadMore.setPaintFlags( holder.tvReadMore.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        holder.tvReadMore.setClickable(true);
+        holder.getTvReadMore().setText(styledText);
+        holder.getTvReadMore().setPaintFlags( holder.getTvReadMore().getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        holder.getTvReadMore().setClickable(true);
     }
 
     @Override

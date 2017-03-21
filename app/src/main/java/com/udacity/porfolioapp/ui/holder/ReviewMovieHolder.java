@@ -9,17 +9,27 @@ import com.udacity.porfolioapp.fragment.ReviewsMovieFragment;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by jhurtace on 01/03/2017.
  */
 public class ReviewMovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     private final ReviewsMovieFragment.Callbacks mCallbacks;
-    public TextView tvAuthor,tvDetail;
+    @BindView(R.id.tvAuthorReview)
+    TextView tvAuthor;
+    @BindView(R.id.tvDetailReview)
+    TextView tvDetail;
+    @BindView(R.id.tvReadMore)
+    TextView tvReadMore;
+
     private View itemView;
-    public TextView tvReadMore;
+
     public ReviewMovieHolder(View itemView, ReviewsMovieFragment.Callbacks mCallbacks) {
         super(itemView);
+        ButterKnife.bind(this, itemView);
         this.itemView=itemView;
         this.mCallbacks=mCallbacks;
         tvAuthor = (TextView) itemView.findViewById(R.id.tvAuthorReview);
@@ -50,6 +60,14 @@ public class ReviewMovieHolder extends RecyclerView.ViewHolder implements View.O
 
     public void setItemView(View itemView) {
         this.itemView = itemView;
+    }
+
+    public TextView getTvReadMore() {
+        return tvReadMore;
+    }
+
+    public void setTvReadMore(TextView tvReadMore) {
+        this.tvReadMore = tvReadMore;
     }
 
     @Override

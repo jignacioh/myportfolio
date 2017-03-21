@@ -23,6 +23,8 @@ import com.udacity.porfolioapp.util.NetworkUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,17 +41,17 @@ public class DetailsMovieFragment extends BaseFragment implements Callback<ListT
         public static final String ARG_LIST_TRAILER="list";
         public static final String ARG_MOVIE="movie";
 
-
-
         private Callbacks mCallbacks ;
         private MovieRestAPI apiService;
         private Movie movie;
         private List<Trailer> lTrailerList;
         private List<Object> listGeneric;
 
+        @BindView(R.id.rvComplexDetail)
+        RecyclerView rvComplexDetail;
+        @BindView(R.id.pbLoadTrailer)
+        ProgressBar pbLoadTrailer;
 
-        private RecyclerView rvComplexDetail;
-        private ProgressBar pbLoadTrailer;
         private MainMovieRecyclerViewAdapter mainMovieRecyclerViewAdapter;
 
     public static Fragment newInstance(Movie movie) {
@@ -82,11 +84,10 @@ public class DetailsMovieFragment extends BaseFragment implements Callback<ListT
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)  {
         View rootView = inflater.inflate(R.layout.fragment_movie_body, container, false);
+        ButterKnife.bind(this,rootView);
         setRetainInstance(true);
         apiService = ApiClient.getClient().create(MovieRestAPI.class);
 
-        pbLoadTrailer=(ProgressBar)rootView.findViewById(R.id.pbLoadTrailer);
-        rvComplexDetail=(RecyclerView) rootView.findViewById(R.id.rvComplexDetail);
         rvComplexDetail.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvComplexDetail.setHasFixedSize(true);
         mainMovieRecyclerViewAdapter=new MainMovieRecyclerViewAdapter(listGeneric,getActivity(),mCallbacks,this);

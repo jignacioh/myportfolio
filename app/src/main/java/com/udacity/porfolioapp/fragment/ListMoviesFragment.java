@@ -28,6 +28,8 @@ import com.udacity.porfolioapp.util.NetworkUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,14 +46,29 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
     public static final int TYPE_POPULAR_MOVIES= R.id.fabPopular;
     private final static String API_KEY = "b3420c7e4ccc91fd03c3cd0ff60d9a92";
 
+    @BindView(R.id.rvMovies)
+    RecyclerView rvMovies;
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.fabPopular)
+    FloatingActionButton fabPopular;
+    @BindView(R.id.fabRated)
+    FloatingActionButton fabRated;
+    @BindView(R.id.fabFavorite)
+    FloatingActionButton fabFavorite;
 
-    private RecyclerView rvMovies;
-    private SwipeRefreshLayout swipeContainer;
-    private FloatingActionButton fab,fabPopular,fabRated,fabFavorite;
-    private TextView tvType,tvMessage;
+    @BindView(R.id.tvType)
+    TextView tvType;
+    @BindView(R.id.tvMessage)
+    TextView tvMessage;
+    @BindView(R.id.llMessage)
+    LinearLayout llMessage;
+    @BindView(R.id.btRetry)
+    Button btReload;
+
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
-    private LinearLayout llMessage;
-    private Button btReload;
 
     private Callbacks mCallbacks ;
     private List<Movie> listMovies;
@@ -116,6 +133,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listmovies_list, container, false);
+        ButterKnife.bind(this, view);
         setRetainInstance(true);
         if (savedInstanceState==null){
             listMovies=new ArrayList<>();
@@ -126,32 +144,20 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         }
         apiService = ApiClient.getClient().create(MovieRestAPI.class);
 
-        Context context = view.getContext();
-
-        fab = (FloatingActionButton)view.findViewById(R.id.fab);
-        fabPopular = (FloatingActionButton)view.findViewById(R.id.fabPopular);
-        fabRated = (FloatingActionButton)view.findViewById(R.id.fabRated);
-        fabFavorite=(FloatingActionButton)view.findViewById(R.id.fabFavorite);
-        tvType=(TextView)view.findViewById(R.id.tvType);
-        llMessage=(LinearLayout) view.findViewById(R.id.llMessage);
-        btReload=(Button) view.findViewById(R.id.btRetry);
-        tvMessage=(TextView)view.findViewById(R.id.tvMessage);
-
-        fab_open = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.fab_close);
-        rotate_forward = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.rotate_backward);
+        fab_open = AnimationUtils.loadAnimation(view.getContext().getApplicationContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(view.getContext().getApplicationContext(),R.anim.fab_close);
+        rotate_forward = AnimationUtils.loadAnimation(view.getContext().getApplicationContext(),R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(view.getContext().getApplicationContext(),R.anim.rotate_backward);
         fab.setOnClickListener(this);
         fabPopular.setOnClickListener(this);
         fabRated.setOnClickListener(this);
         fabFavorite.setOnClickListener(this);
         btReload.setOnClickListener(this);
 
-        rvMovies= (RecyclerView) view.findViewById(R.id.rvMovies);
         if (getBoolean(R.bool.isTablet)){
-            rvMovies.setLayoutManager(new GridLayoutManager(context, getNumberRowsTabletOrientation()));
+            rvMovies.setLayoutManager(new GridLayoutManager(view.getContext(), getNumberRowsTabletOrientation()));
         }else {
-            rvMovies.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+            rvMovies.setLayoutManager(new GridLayoutManager(view.getContext(), mColumnCount));
         }
 
 

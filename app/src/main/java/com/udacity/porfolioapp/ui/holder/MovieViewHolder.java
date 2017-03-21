@@ -11,6 +11,9 @@ import com.udacity.porfolioapp.model.Movie;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by clapj on 5/11/2016.
  */
@@ -19,20 +22,37 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     private View layoutView;
     private ListMoviesFragment.Callbacks mCallbacks;
-    public TextView tvNameMovie;
-    public ImageView ivImageMovie;
+    @BindView(R.id.tvNameMovie)
+    TextView tvNameMovie;
+    @BindView(R.id.ivImageMovie)
+    ImageView ivImageMovie;
 
     public MovieViewHolder(View layoutView, ListMoviesFragment.Callbacks mCallbacks) {
         super(layoutView);
+        ButterKnife.bind(this, layoutView);
         this.layoutView=layoutView;
         this.mCallbacks=mCallbacks;
         itemView.setOnClickListener(this);
-        tvNameMovie = (TextView) itemView.findViewById(R.id.tvNameMovie);
-        ivImageMovie = (ImageView) itemView.findViewById(R.id.ivImageMovie);
     }
 
     @Override
     public void onClick(View view) {
         mCallbacks.onItemSelected((ArrayList<Movie>)layoutView.getTag(),getAdapterPosition(), layoutView.findViewById(R.id.ivImageMovie));
+    }
+
+    public TextView getTvNameMovie() {
+        return tvNameMovie;
+    }
+
+    public void setTvNameMovie(TextView tvNameMovie) {
+        this.tvNameMovie = tvNameMovie;
+    }
+
+    public ImageView getIvImageMovie() {
+        return ivImageMovie;
+    }
+
+    public void setIvImageMovie(ImageView ivImageMovie) {
+        this.ivImageMovie = ivImageMovie;
     }
 }

@@ -13,8 +13,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.udacity.porfolioapp.R;
-import com.udacity.porfolioapp.fragment.HomeMovieFragment;
 import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
+import com.udacity.porfolioapp.fragment.HomeMovieFragment;
 import com.udacity.porfolioapp.fragment.ListMoviesFragment;
 import com.udacity.porfolioapp.fragment.ReviewsMovieFragment;
 import com.udacity.porfolioapp.model.Movie;
@@ -22,6 +22,9 @@ import com.udacity.porfolioapp.model.Review;
 import com.udacity.porfolioapp.model.Trailer;
 
 import java.util.ArrayList;
+
+import butterknife.ButterKnife;
+
 /**
  * Created by Juan PC
  */
@@ -38,6 +41,7 @@ public class ListMoviesActivity extends BaseActivity implements ListMoviesFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_movies);
+        ButterKnife.bind(this);
         if (savedInstanceState!=null){
             movieSelected=savedInstanceState.getParcelable(ARG_MOVIE_SELECTED);
         }
