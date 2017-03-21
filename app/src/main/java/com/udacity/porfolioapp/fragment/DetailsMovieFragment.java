@@ -38,21 +38,18 @@ public class DetailsMovieFragment extends BaseFragment implements Callback<ListT
         public static final String ARG_ITEM_MOVIE = "movie";
         public static final String ARG_LIST_TRAILER="list";
         public static final String ARG_MOVIE="movie";
+
+
+
         private Callbacks mCallbacks ;
         private MovieRestAPI apiService;
-        /**
-         * The dummy content this fragment is presenting.
-         */
         private Movie movie;
         private List<Trailer> lTrailerList;
-        /**
-         * Mandatory empty constructor for the fragment manager to instantiate the
-         * fragment (e.g. upon screen orientation changes).
-         */
+        private List<Object> listGeneric;
+
 
         private RecyclerView rvComplexDetail;
         private ProgressBar pbLoadTrailer;
-        private List<Object> listGeneric;
         private MainMovieRecyclerViewAdapter mainMovieRecyclerViewAdapter;
 
     public static Fragment newInstance(Movie movie) {
@@ -69,6 +66,10 @@ public class DetailsMovieFragment extends BaseFragment implements Callback<ListT
         lTrailerList=new ArrayList<>();
         if (getArguments().containsKey(ARG_ITEM_MOVIE)) {
             movie = getArguments().getParcelable(ARG_ITEM_MOVIE);
+        }
+        if (savedInstanceState!=null){
+            lTrailerList=savedInstanceState.getParcelableArrayList(ARG_LIST_TRAILER);
+            movie=savedInstanceState.getParcelable(ARG_MOVIE);
         }
     }
     @Override
@@ -91,30 +92,28 @@ public class DetailsMovieFragment extends BaseFragment implements Callback<ListT
         mainMovieRecyclerViewAdapter=new MainMovieRecyclerViewAdapter(listGeneric,getActivity(),mCallbacks,this);
         rvComplexDetail.setAdapter(mainMovieRecyclerViewAdapter);
 
-        Call<ListTrailer> call;
         listGeneric=new ArrayList<>();
-
-
+        listGeneric.add(movie);
         if (savedInstanceState==null){
-            listGeneric.add(movie);
-            if (NetworkUtil.isOnline(getContext())) {
-                //swipeContainer.setRefreshing(true);
-                pbLoadTrailer.setVisibility(View.VISIBLE);
-                call = apiService.loadTrailersMovie(movie.getId()+"",ApiClient.TAG_API);
-                call.enqueue(DetailsMovieFragment.this);
-            }
+            fillTrailersList();
         }else {
-            movie=savedInstanceState.getParcelable(ARG_MOVIE);
-            lTrailerList=savedInstanceState.getParcelableArrayList(ARG_LIST_TRAILER);
-            listGeneric.add(movie);
             listGeneric.addAll(lTrailerList);
+            if (lTrailerList.size()==0){
+                fillTrailersList();
+            }
         }
         mainMovieRecyclerViewAdapter=new MainMovieRecyclerViewAdapter(listGeneric,getActivity(),mCallbacks,this);
         rvComplexDetail.setAdapter(mainMovieRecyclerViewAdapter);
 
         return rootView;
     }
-
+    public void fillTrailersList(){
+        if (NetworkUtil.isOnline(getContext())) {
+            pbLoadTrailer.setVisibility(View.VISIBLE);
+            Call<ListTrailer> call = apiService.loadTrailersMovie(movie.getId() + "", ApiClient.TAG_API);
+            call.enqueue(DetailsMovieFragment.this);
+        }
+    }
     @Override
     public void onResponse(Call<ListTrailer> call, Response<ListTrailer> response) {
         pbLoadTrailer.setVisibility(View.GONE);

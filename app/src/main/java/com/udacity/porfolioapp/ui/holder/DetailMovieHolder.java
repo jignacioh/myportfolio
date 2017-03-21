@@ -1,7 +1,6 @@
 package com.udacity.porfolioapp.ui.holder;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -17,7 +16,6 @@ import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
 public class DetailMovieHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener{
 
     private DetailsMovieFragment.Callbacks mCallbacks;
-    private View view;
     private ToggleButton ivAddFavo;
     private ImageView ivPoster;
     private TextView tvPopularityMovie;
@@ -28,7 +26,6 @@ public class DetailMovieHolder extends RecyclerView.ViewHolder implements Compou
 
     public DetailMovieHolder(View view, DetailsMovieFragment.Callbacks mCallbacks){
         super(view);
-        this.view=view;
         this.mCallbacks=mCallbacks;
         ivAddFavo=(ToggleButton) view.findViewById(R.id.ivAddFavo);
         ivPoster=(ImageView) view.findViewById(R.id.ivDetailMovie);
@@ -40,9 +37,8 @@ public class DetailMovieHolder extends RecyclerView.ViewHolder implements Compou
         ivAddFavo.setOnCheckedChangeListener(this);
     }
     @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        Log.i("CHECK",b+"");
-        mCallbacks.onItemCheckFavorite(b);
+    public void onCheckedChanged(CompoundButton compoundButton, boolean check) {
+        mCallbacks.onItemCheckFavorite(check);
     }
 
     public ToggleButton getIvAddFavo() {

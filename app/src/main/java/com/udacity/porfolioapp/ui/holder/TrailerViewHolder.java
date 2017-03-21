@@ -32,7 +32,6 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.O
     @Override
     public void onClick(View view) {
         mCallbacks.onTrailerSelected((ArrayList<Object>) itemView.getTag(),getAdapterPosition(),itemView);
-        //Toast.makeText(view.getContext(), tvTrailer.getText().toString(), Toast.LENGTH_SHORT).show();
     }
 
     public TextView getTvTrailer() {

@@ -13,27 +13,19 @@ import android.widget.RadioButton;
 
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.model.Movie;
-import com.udacity.porfolioapp.model.Trailer;
-import com.udacity.porfolioapp.service.MovieRestAPI;
-
-import java.util.List;
 
 /**
  * Created by Juan PC
  */
-public class DetailMovieFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener{
+public class HomeMovieFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener{
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
     public static final String ARG_ITEM_MOVIE = "movie";
-    public static final String BASE_IMAGE="http://image.tmdb.org/t/p/w500/";
     public static final String ARG_CHECK_REVIEW = "checkreview";
     public static final String ARG_CHECK_DETAIL = "checkdetail";
 
-    private List<Trailer> listTrailer;
-    private MovieRestAPI apiService;
     /**
      * The dummy content this fragment is presenting.
      */
@@ -51,7 +43,7 @@ public class DetailMovieFragment extends BaseFragment implements CompoundButton.
     private FragmentTransaction fragmentTransaction;
     private boolean checkDetail=true,checkReview=false;
 
-    public DetailMovieFragment() {
+    public HomeMovieFragment() {
     }
 
     @Override
@@ -93,7 +85,7 @@ public class DetailMovieFragment extends BaseFragment implements CompoundButton.
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
         Fragment fragment=null;
         fragmentManager=getActivity().getSupportFragmentManager();

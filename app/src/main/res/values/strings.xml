@@ -27,4 +27,6 @@
     <string name="lb_voted">Votes: </string>
     <string name="lb_release">Release date: </string>
     <string name="lb_summary">Summary: </string>
+    <string name="lb_trailer">Trailer</string>
+    <string name="link_yt">https://www.youtube.com/watch?v=</string>
 </resources>

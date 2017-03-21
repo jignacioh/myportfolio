@@ -23,12 +23,8 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieViewHold
     private ListMoviesFragment.Callbacks mCallbacks;
     private Context context;
     private List<Movie> movieList;
-    private Context listMoviesFragment;
     private final static String baseUrlImage="http://image.tmdb.org/t/p/w300";
-    public MovieRecyclerViewAdapter(Context listMoviesFragment, List<Movie> movieList) {
-        this.movieList = movieList;
-        this.listMoviesFragment = listMoviesFragment;
-    }
+
 
     public MovieRecyclerViewAdapter(Context context, ListMoviesFragment.Callbacks mCallbacks, List<Movie> listMovies) {
         this.movieList = listMovies;
@@ -41,8 +37,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieViewHold
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_movie, null);
         layoutView.setTag(movieList);
-        MovieViewHolder rcv = new MovieViewHolder(layoutView,context,mCallbacks);
-        return rcv;
+        return  new MovieViewHolder(layoutView,mCallbacks);
     }
 
     @Override

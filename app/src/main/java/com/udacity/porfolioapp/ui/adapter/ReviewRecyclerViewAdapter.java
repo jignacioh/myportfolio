@@ -2,13 +2,10 @@ package com.udacity.porfolioapp.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.ReviewsMovieFragment;
@@ -25,7 +22,6 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewMovieH
     private Context context;
     private ReviewsMovieFragment.Callbacks mCallbacks ;
     private List<Review> itemList;
-    //private OnChildClickListener onChildClickListener;
 
 
     public ReviewRecyclerViewAdapter(List<Review> listReviews, ReviewsMovieFragment.Callbacks mCallbacks, Context context) {

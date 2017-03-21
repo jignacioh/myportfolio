@@ -1,14 +1,12 @@
 package com.udacity.porfolioapp.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +17,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.udacity.porfolioapp.util.NetworkUtil;
-import com.udacity.porfolioapp.listener.OnMovieClickListener;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.model.ListMovie;
 import com.udacity.porfolioapp.model.Movie;
 import com.udacity.porfolioapp.service.ApiClient;
 import com.udacity.porfolioapp.service.MovieRestAPI;
 import com.udacity.porfolioapp.ui.adapter.MovieRecyclerViewAdapter;
+import com.udacity.porfolioapp.util.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,8 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
 
     // TODO: Customize parameter argument names
     public static final String ARG_COLUMN_COUNT = "column-count";
+    public static final String ARG_TYPE_FILTER = "type";
+    public static final String ARG_LIST_MOVIES = "movies";
     public static final int TYPE_POPULAR_MOVIES= R.id.fabPopular;
     private final static String API_KEY = "b3420c7e4ccc91fd03c3cd0ff60d9a92";
 
@@ -49,7 +48,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
     private RecyclerView rvMovies;
     private SwipeRefreshLayout swipeContainer;
     private FloatingActionButton fab,fabPopular,fabRated,fabFavorite;
-    private TextView tvType;
+    private TextView tvType,tvMessage;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
     private LinearLayout llMessage;
     private Button btReload;
@@ -60,10 +59,9 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
     private MovieRecyclerViewAdapter mrvAdapter;
 
     private int mColumnCount = 2;
-
     private int idTypeSort;
     private Boolean isFabOpen = false;
-    private TextView tvMessage;
+
 
 
     // TODO: Customize parameter initialization
@@ -123,8 +121,8 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
             listMovies=new ArrayList<>();
             idTypeSort=TYPE_POPULAR_MOVIES;
         }else {
-            listMovies=savedInstanceState.getParcelableArrayList("movies");
-            idTypeSort=savedInstanceState.getInt("type");
+            listMovies=savedInstanceState.getParcelableArrayList(ARG_LIST_MOVIES);
+            idTypeSort=savedInstanceState.getInt(ARG_TYPE_FILTER);
         }
         apiService = ApiClient.getClient().create(MovieRestAPI.class);
 
@@ -301,7 +299,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
     }
 
     public interface Callbacks {
-        public void onItemSelected(ArrayList<Movie> list,int position,View view);
+        void onItemSelected(ArrayList<Movie> list,int position,View view);
     }
 
 
@@ -312,8 +310,8 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("movies", (ArrayList<? extends Parcelable>) listMovies);
-        outState.putInt("type",idTypeSort);
+        outState.putParcelableArrayList(ARG_LIST_MOVIES, (ArrayList<? extends Parcelable>) listMovies);
+        outState.putInt(ARG_TYPE_FILTER,idTypeSort);
         super.onSaveInstanceState(outState);
     }
 }

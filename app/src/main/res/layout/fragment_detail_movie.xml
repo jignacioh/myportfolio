@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context="com.udacity.porfolioapp.fragment.DetailMovieFragment">
+    tools:context=".fragment.HomeMovieFragment">
 
       <LinearLayout
           android:layout_width="match_parent"
@@ -15,7 +15,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="@android:color/white"
-             tools:context="com.udacity.porfolioapp.fragment.DetailMovieFragment">
+             tools:context=".fragment.HomeMovieFragment">
 
             <ImageView
                 android:id="@+id/ivDetailMovie"

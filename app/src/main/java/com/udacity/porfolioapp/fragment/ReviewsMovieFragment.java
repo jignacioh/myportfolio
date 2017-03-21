@@ -18,7 +18,6 @@ import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.model.ListReview;
 import com.udacity.porfolioapp.model.Movie;
 import com.udacity.porfolioapp.model.Review;
-import com.udacity.porfolioapp.model.Trailer;
 import com.udacity.porfolioapp.service.ApiClient;
 import com.udacity.porfolioapp.service.MovieRestAPI;
 import com.udacity.porfolioapp.ui.adapter.ReviewRecyclerViewAdapter;
@@ -36,23 +35,14 @@ import retrofit2.Response;
  */
 public class ReviewsMovieFragment extends BaseFragment implements Callback<ListReview>,View.OnClickListener{
 
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
+
     public static final String ARG_ITEM_MOVIE = "public";
     public static final String ARG_LIST_REVIEW ="reviews";
 
-    //private DetailMovieFragment.Callbacks mCallbacks ;
     private List<Review> listReviews;
     private MovieRestAPI apiService;
     private ReviewsMovieFragment.Callbacks mCallbacks ;
 
-
-
-    /**
-     * The dummy content this fragment is presenting.
-     */
     private Movie movie;
 
     /**
@@ -172,7 +162,7 @@ public class ReviewsMovieFragment extends BaseFragment implements Callback<ListR
     }
 
     public interface Callbacks {
-        public void onReviewSelected(ArrayList<Object> list,int position,View view);
+        void onReviewSelected(ArrayList<Object> list,int position,View view);
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {

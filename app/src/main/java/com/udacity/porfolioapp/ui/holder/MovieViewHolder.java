@@ -1,11 +1,9 @@
 package com.udacity.porfolioapp.ui.holder;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.ListMoviesFragment;
@@ -24,7 +22,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnC
     public TextView tvNameMovie;
     public ImageView ivImageMovie;
 
-    public MovieViewHolder(View layoutView, Context context, ListMoviesFragment.Callbacks mCallbacks) {
+    public MovieViewHolder(View layoutView, ListMoviesFragment.Callbacks mCallbacks) {
         super(layoutView);
         this.layoutView=layoutView;
         this.mCallbacks=mCallbacks;
@@ -36,6 +34,5 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnC
     @Override
     public void onClick(View view) {
         mCallbacks.onItemSelected((ArrayList<Movie>)layoutView.getTag(),getAdapterPosition(), layoutView.findViewById(R.id.ivImageMovie));
-        //Toast.makeText(view.getContext(), tvNameMovie.getText().toString(), Toast.LENGTH_SHORT).show();
     }
 }

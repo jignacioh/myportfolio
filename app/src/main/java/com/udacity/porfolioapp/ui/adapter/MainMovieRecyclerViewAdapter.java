@@ -29,7 +29,6 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     private DetailsMovieFragment detailMovieFragment;
     private DetailsMovieFragment.Callbacks mCallbacks;
     private Context context;
-    // The items to display in your RecyclerView
     private List<Object> items;
 
     private final int DETAIL = 0, TRAILER = 1;
@@ -63,48 +62,34 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
-        switch (viewType) {
-            case DETAIL:
-                View v1 = inflater.inflate(R.layout.item_head_movie, viewGroup, false);
-                v1.setTag(items);
-                viewHolder = new DetailMovieHolder(v1,mCallbacks);
-                break;
-            case TRAILER:
-                View v2 = inflater.inflate(R.layout.item_trailer, viewGroup, false);
-                v2.setTag(items);
-                viewHolder = new TrailerViewHolder(v2,mCallbacks);
-                //break;
-            default:
-                //View v = inflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
-                //viewHolder = new RecyclerViewSimpleTextViewHolder(v);
-                break;
+        if (viewType==DETAIL){
+            View v1 = inflater.inflate(R.layout.item_head_movie, viewGroup, false);
+            v1.setTag(items);
+            viewHolder = new DetailMovieHolder(v1,mCallbacks);
+        }else {
+            View v2 = inflater.inflate(R.layout.item_trailer, viewGroup, false);
+            v2.setTag(items);
+            viewHolder = new TrailerViewHolder(v2,mCallbacks);
         }
+
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        switch (viewHolder.getItemViewType()) {
-            case DETAIL:
-                DetailMovieHolder detailMovieHolder = (DetailMovieHolder) viewHolder;
-                fillViewHolderDetail(detailMovieHolder, position);
-                break;
-            case TRAILER:
-                TrailerViewHolder trailerViewHolder = (TrailerViewHolder) viewHolder;
-                fillViewHolderTrailer(trailerViewHolder, position);
-                break;
-            default:
-                //RecyclerViewSimpleTextViewHolder vh = (RecyclerViewSimpleTextViewHolder) viewHolder;
-                //configureDefaultViewHolder(vh, position);
-                break;
+        if (viewHolder.getItemViewType()==DETAIL){
+            DetailMovieHolder detailMovieHolder = (DetailMovieHolder) viewHolder;
+            fillViewHolderDetail(detailMovieHolder, position);
+        }else {
+            TrailerViewHolder trailerViewHolder = (TrailerViewHolder) viewHolder;
+            fillViewHolderTrailer(trailerViewHolder, position);
         }
     }
 
     private void fillViewHolderTrailer(TrailerViewHolder trailerViewHolder, int position) {
         Trailer trailer=(Trailer)items.get(position);
         if (trailer!=null){
-            trailerViewHolder.getTvTrailer().setText("Trailer "+position);
-
+            trailerViewHolder.getTvTrailer().setText(context.getString(R.string.lb_trailer)+position);
         }
     }
 
