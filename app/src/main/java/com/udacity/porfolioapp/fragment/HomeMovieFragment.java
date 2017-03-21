@@ -62,7 +62,7 @@ public class HomeMovieFragment extends BaseFragment implements CompoundButton.On
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_movie_detail, null);
         setRetainInstance(true);
         rdbDetail=(RadioButton)rootView.findViewById(R.id.rdbDetail);
         rdbReview=(RadioButton)rootView.findViewById(R.id.rdbReview);

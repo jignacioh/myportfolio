@@ -90,6 +90,7 @@ public class ListMoviesActivity extends BaseActivity implements ListMoviesFragme
     public void onItemSelected(ArrayList<Movie> list, int position,View view) {
         movieSelected = list.get(position);
         if (mTwoPane) {
+            getSupportActionBar().setTitle(movieSelected.getNameMovie());
             Bundle arguments = new Bundle();
             arguments.putParcelable(HomeMovieFragment.ARG_ITEM_MOVIE,  list.get(position));
             HomeMovieFragment fragment = new HomeMovieFragment();

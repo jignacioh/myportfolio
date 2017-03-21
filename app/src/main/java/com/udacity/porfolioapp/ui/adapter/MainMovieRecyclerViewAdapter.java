@@ -63,11 +63,11 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
         if (viewType==DETAIL){
-            View v1 = inflater.inflate(R.layout.item_head_movie, viewGroup, false);
+            View v1 = inflater.inflate(R.layout.item_head_movie, null);
             v1.setTag(items);
             viewHolder = new DetailMovieHolder(v1,mCallbacks);
         }else {
-            View v2 = inflater.inflate(R.layout.item_trailer, viewGroup, false);
+            View v2 = inflater.inflate(R.layout.item_trailer, null);
             v2.setTag(items);
             viewHolder = new TrailerViewHolder(v2,mCallbacks);
         }
