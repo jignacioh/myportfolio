@@ -1,6 +1,7 @@
 package com.udacity.porfolioapp.ui.adapter;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,12 +12,10 @@ import com.bumptech.glide.Glide;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
 import com.udacity.porfolioapp.model.Movie;
-import com.udacity.porfolioapp.model.MovieDao;
+import com.udacity.porfolioapp.model.MovieContract;
 import com.udacity.porfolioapp.model.Trailer;
 import com.udacity.porfolioapp.ui.holder.DetailMovieHolder;
 import com.udacity.porfolioapp.ui.holder.TrailerViewHolder;
-
-import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
 
@@ -106,12 +105,22 @@ public class MainMovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             detailMovieHolder.getTvYearMovie().setText(context.getString(R.string.lb_release)+movie.getYearMovie());
             detailMovieHolder.getTvSummaryMovie().setText(context.getString(R.string.lb_summary)+movie.getDescriptionMovie());
         }
-        QueryBuilder<Movie> movieQueryBuilder=detailMovieFragment.getAppDaoSession().getMovieDao().queryBuilder();
-        if (movieQueryBuilder.where(MovieDao.Properties.Id.eq(movie.getId())).count()!=0){
+
+        String selectionArgs[]=new String[]{movie.getNameMovie()};
+        Cursor cursor = context.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null, MovieContract.MovieEntry.COLUMN_TITLE + "=?", selectionArgs, null);
+
+        //QueryBuilder<Movie> movieQueryBuilder=detailMovieFragment.getAppDaoSession().getMovieDao().queryBuilder();
+
+        if (cursor.getCount()==0){
+            detailMovieHolder.getIvAddFavo().setChecked(false);
+        }else {
+            detailMovieHolder.getIvAddFavo().setChecked(true);
+        }
+       /* if (movieQueryBuilder.where(MovieDao.Properties.Id.eq(movie.getId())).count()!=0){
             detailMovieHolder.getIvAddFavo().setChecked(true);
         }else {
             detailMovieHolder.getIvAddFavo().setChecked(false);
-        }
+        }*/
     }
 
 }

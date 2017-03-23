@@ -1,5 +1,6 @@
 package com.udacity.porfolioapp.model;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.BaseColumns;
@@ -86,6 +87,18 @@ public class Movie  implements Parcelable   {
         this.yearMovie = yearMovie;
         this.descriptionMovie = descriptionMovie;
         this.listTrailerMovie = listTrailerMovie;
+    }
+
+    public Movie(Cursor cursor) {
+        this.id = cursor.getLong(cursor.getColumnIndex(MovieContract.MovieEntry._ID));
+        this.nameMovie =cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE));
+        this.yearMovie = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_DATE));
+        this.descriptionMovie = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW));
+        this.urlMovie = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER));
+        this.imageMovie = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP));
+        this.popularity = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POPULAR));
+        this.voteAverage =cursor.getDouble(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_AVERAGE));
+        this.voteCount = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE));
     }
 
     public static final class MovieEntry implements BaseColumns{
@@ -185,7 +198,7 @@ public class Movie  implements Parcelable   {
     }
 
 
-    protected Movie(Parcel in) {
+    public Movie(Parcel in) {
         id = in.readLong();
         urlMovie = in.readString();
         nameMovie = in.readString();

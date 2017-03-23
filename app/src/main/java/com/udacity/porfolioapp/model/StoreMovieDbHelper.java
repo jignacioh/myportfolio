@@ -33,16 +33,16 @@ public class StoreMovieDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         final String SQL_CREATE_MOVIE_TABLE="CREATE TABLE "+
-                Movie.TABLE_NAME+" (" +
-                Movie.ROW_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                Movie.ROW_TITLE+" TEXT NOT NULL, " +
-                Movie.ROW_OVERVIEW+" TEXT NOT NULL, " +
-                Movie.ROW_DATE+" TEXT NOT NULL, " +
-                Movie.ROW_POSTER+" TEXT NOT NULL, " +
-                Movie.ROW_POPULAR+" TEXT NOT NULL," +
-                Movie.ROW_BACKDROP+" TEXT NOT NULL," +
-                Movie.ROW_VOTE+" INT NOT NULL," +
-                Movie.ROW_AVERAGE+"REAL NOT NULL)";
+                MovieContract.MovieEntry.TABLE_NAME+" (" +
+                MovieContract.MovieEntry._ID+" INTEGER PRIMARY KEY , " +
+                MovieContract.MovieEntry.COLUMN_TITLE+" TEXT NOT NULL, " +
+                MovieContract.MovieEntry.COLUMN_OVERVIEW+" TEXT NOT NULL, " +
+                MovieContract.MovieEntry.COLUMN_DATE+" TEXT NOT NULL, " +
+                MovieContract.MovieEntry.COLUMN_POSTER+" TEXT NOT NULL, " +
+                MovieContract.MovieEntry.COLUMN_POPULAR+" TEXT NOT NULL," +
+                MovieContract.MovieEntry.COLUMN_BACKDROP+" TEXT NOT NULL," +
+                MovieContract.MovieEntry.COLUMN_VOTE+" INT NOT NULL," +
+                MovieContract.MovieEntry.COLUMN_AVERAGE+" REAL NOT NULL)";
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_TABLE);
     }
 

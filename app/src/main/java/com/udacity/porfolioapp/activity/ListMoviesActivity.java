@@ -1,5 +1,6 @@
 package com.udacity.porfolioapp.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -7,14 +8,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.fragment.DetailsMovieFragment;
@@ -22,6 +21,7 @@ import com.udacity.porfolioapp.fragment.HomeMovieFragment;
 import com.udacity.porfolioapp.fragment.ListMoviesFragment;
 import com.udacity.porfolioapp.fragment.ReviewsMovieFragment;
 import com.udacity.porfolioapp.model.Movie;
+import com.udacity.porfolioapp.model.MovieContract;
 import com.udacity.porfolioapp.model.Review;
 import com.udacity.porfolioapp.model.Trailer;
 import com.udacity.porfolioapp.model.provider.MovieContentProvider;
@@ -36,15 +36,13 @@ import butterknife.ButterKnife;
 public class ListMoviesActivity extends BaseActivity implements
         ListMoviesFragment.Callbacks,
         DetailsMovieFragment.Callbacks,
-        ReviewsMovieFragment.Callbacks,
-        LoaderManager.LoaderCallbacks<Cursor>{
+        ReviewsMovieFragment.Callbacks{
 
     private boolean mTwoPane=false;
     public static final String ARG_FRAG_LIST="ListMovieFragment";
     public static final String ARG_MOVIE_SELECTED="movieSelected";
     private FrameLayout frameLayoutMainView,frameLayoutDetailContainer;
     private Movie movieSelected;
-    SimpleCursorAdapter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +102,7 @@ public class ListMoviesActivity extends BaseActivity implements
         if (mTwoPane) {
             getSupportActionBar().setTitle(movieSelected.getNameMovie());
             Bundle arguments = new Bundle();
-            arguments.putParcelable(HomeMovieFragment.ARG_ITEM_MOVIE,  list.get(position));
+            arguments.putParcelable(HomeMovieFragment.ARG_ITEM_MOVIE, movieSelected);
             HomeMovieFragment fragment = new HomeMovieFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, fragment).commit();
@@ -118,12 +116,47 @@ public class ListMoviesActivity extends BaseActivity implements
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, view.getTransitionName());
                 Uri todoUri = Uri.parse(MovieContentProvider.CONTENT_URI + "/" + position);
                 intentD.putExtra(MovieContentProvider.CONTENT_ITEM_TYPE, todoUri);
-                intentD.putExtra(HomeMovieFragment.ARG_ITEM_MOVIE,list.get(position));
+                intentD.putExtra(HomeMovieFragment.ARG_ITEM_MOVIE,movieSelected);
                 startActivity(intentD, options.toBundle());
             }
             else {
                 Intent detailIntent = new Intent(this, ItemMovieActivity.class);
-                detailIntent.putExtra(HomeMovieFragment.ARG_ITEM_MOVIE,list.get(position));
+                detailIntent.putExtra(HomeMovieFragment.ARG_ITEM_MOVIE,movieSelected);
+                startActivity(detailIntent);
+            }
+        }
+    }
+
+    @Override
+    public void onFavoriteSelected(Cursor cursor, int position, View view) {
+        cursor.moveToPosition(position);
+        movieSelected=new Movie(cursor);
+
+
+
+        if (mTwoPane) {
+            getSupportActionBar().setTitle(movieSelected.getNameMovie());
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(HomeMovieFragment.ARG_ITEM_MOVIE,  movieSelected);
+            HomeMovieFragment fragment = new HomeMovieFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, fragment).commit();
+
+        } else {
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                Intent intentD = new Intent(this, ItemMovieActivity.class);
+                Pair<View, String> pair1 = Pair.create(view, view.getTransitionName());
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, view.getTransitionName());
+                Uri todoUri = Uri.parse(MovieContentProvider.CONTENT_URI + "/" + position);
+                intentD.putExtra(MovieContentProvider.CONTENT_ITEM_TYPE, todoUri);
+                intentD.putExtra(HomeMovieFragment.ARG_ITEM_MOVIE,movieSelected);
+                startActivity(intentD, options.toBundle());
+            }
+            else {
+                Intent detailIntent = new Intent(this, ItemMovieActivity.class);
+                detailIntent.putExtra(HomeMovieFragment.ARG_ITEM_MOVIE,movieSelected);
                 startActivity(detailIntent);
             }
         }
@@ -142,9 +175,50 @@ public class ListMoviesActivity extends BaseActivity implements
     public void onItemCheckFavorite(boolean isFavorite) {
 
         if (isFavorite){
-            getAppDaoSession().getMovieDao().insertOrReplace(movieSelected);
+            //getAppDaoSession().getMovieDao().insertOrReplace(movie);
+            String selectionArgs[]=new String[]{movieSelected.getNameMovie()};
+            Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null, MovieContract.MovieEntry.COLUMN_TITLE + "=?", selectionArgs, null);
+            if (cursor.getCount()==0) {
+                saveMovie(movieSelected);
+            }
         }else {
-            getAppDaoSession().getMovieDao().deleteByKey(movieSelected.getId());
+            deleteMovie(movieSelected);
+            //getAppDaoSession().getMovieDao().deleteByKey(movie.getId());
+        }
+
+    }
+
+    private void deleteMovie(Movie movieSelected) {
+        // Build appropriate uri with String row id appended
+        String stringId = Long.toString(movieSelected.getId());
+        Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(stringId).build();
+
+        // COMPLETED (2) Delete a single row of data using a ContentResolver
+        getContentResolver().delete(uri, null, null);
+
+        // COMPLETED (3) Restart the loader to re-query for all tasks after a deletion
+        //getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, MainActivity.this);
+    }
+
+    private void saveMovie(Movie movieSelected) {
+        ContentValues values = new ContentValues();
+        values.put(MovieContract.MovieEntry._ID, movieSelected.getId());
+        values.put(MovieContract.MovieEntry.COLUMN_AVERAGE, movieSelected.getVoteAverage());
+        values.put(MovieContract.MovieEntry.COLUMN_BACKDROP, movieSelected.getImageMovie());
+        values.put(MovieContract.MovieEntry.COLUMN_DATE, movieSelected.getYearMovie());
+        values.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movieSelected.getDescriptionMovie());
+        values.put(MovieContract.MovieEntry.COLUMN_POPULAR, movieSelected.getPopularity());
+        values.put(MovieContract.MovieEntry.COLUMN_POSTER, movieSelected.getUrlMovie());
+        values.put(MovieContract.MovieEntry.COLUMN_TITLE, movieSelected.getNameMovie());
+        values.put(MovieContract.MovieEntry.COLUMN_VOTE, movieSelected.getVoteCount());
+        // Insert the content values via a ContentResolver
+        Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, values);
+
+        // COMPLETED (8) Display the URI that's returned with a Toast
+        // [Hint] Don't forget to call finish() to return to MainActivity after this insert is complete
+        if(uri != null) {
+            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -162,21 +236,4 @@ public class ListMoviesActivity extends BaseActivity implements
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = { TodoTable.COLUMN_ID, TodoTable.COLUMN_SUMMARY };
-        CursorLoader cursorLoader = new CursorLoader(this,
-                MyTodoContentProvider.CONTENT_URI, projection, null, null, null);
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
 }

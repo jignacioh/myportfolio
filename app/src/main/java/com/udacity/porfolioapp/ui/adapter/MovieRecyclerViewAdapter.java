@@ -1,6 +1,7 @@
 package com.udacity.porfolioapp.ui.adapter;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieViewHold
     private Context context;
     private List<Movie> movieList;
     private final static String baseUrlImage="http://image.tmdb.org/t/p/w300";
-
+    private Cursor mCursor;
 
     public MovieRecyclerViewAdapter(Context context, ListMoviesFragment.Callbacks mCallbacks, List<Movie> listMovies) {
         this.movieList = listMovies;
@@ -50,5 +51,19 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieViewHold
     @Override
     public int getItemCount() {
         return this.movieList.size();
+    }
+    public Cursor swapCursor(Cursor c) {
+        // check if this cursor is the same as the previous cursor (mCursor)
+        if (mCursor == c) {
+            return null; // bc nothing has changed
+        }
+        Cursor temp = mCursor;
+        this.mCursor = c; // new cursor value assigned
+
+        //check if this is a valid cursor, then update the cursor
+        if (c != null) {
+            this.notifyDataSetChanged();
+        }
+        return temp;
     }
 }

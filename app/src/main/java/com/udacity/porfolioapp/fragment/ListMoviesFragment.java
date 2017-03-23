@@ -1,13 +1,18 @@
 package com.udacity.porfolioapp.fragment;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +25,10 @@ import android.widget.TextView;
 import com.udacity.porfolioapp.R;
 import com.udacity.porfolioapp.model.ListMovie;
 import com.udacity.porfolioapp.model.Movie;
+import com.udacity.porfolioapp.model.MovieContract;
 import com.udacity.porfolioapp.service.ApiClient;
 import com.udacity.porfolioapp.service.MovieRestAPI;
+import com.udacity.porfolioapp.ui.adapter.CursorMovieRecyclerViewAdapter;
 import com.udacity.porfolioapp.ui.adapter.MovieRecyclerViewAdapter;
 import com.udacity.porfolioapp.util.NetworkUtil;
 
@@ -37,9 +44,15 @@ import retrofit2.Response;
 /**
  * Created by Juan PC
  */
-public class ListMoviesFragment extends BaseFragment implements Callback<ListMovie>,View.OnClickListener {
+public class ListMoviesFragment extends BaseFragment implements Callback<ListMovie>,View.OnClickListener,LoaderManager.LoaderCallbacks<Cursor>{
 
     // TODO: Customize parameter argument names
+
+
+    private static final String TAG = ListMoviesFragment.class.getSimpleName();
+    private static final int TASK_LOADER_ID = 0;
+
+
     public static final String ARG_COLUMN_COUNT = "column-count";
     public static final String ARG_TYPE_FILTER = "type";
     public static final String ARG_LIST_MOVIES = "movies";
@@ -78,7 +91,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
     private int mColumnCount = 2;
     private int idTypeSort;
     private Boolean isFabOpen = false;
-
+    private CursorMovieRecyclerViewAdapter mAdapter;
 
 
     // TODO: Customize parameter initialization
@@ -172,8 +185,17 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
             });
         swipeContainer.setRefreshing(true);
 
+
+        mAdapter = new CursorMovieRecyclerViewAdapter(getActivity(),mCallbacks);
+
+        getActivity().getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, this);
+
         if (listMovies.size()==0) {
-            sortByPreference(TYPE_POPULAR_MOVIES);
+            if (idTypeSort==R.id.fabFavorite) {
+                loadFavorites();
+            }else {
+                sortByPreference(TYPE_POPULAR_MOVIES);
+            }
         }else {
             tvType.setVisibility(View.VISIBLE);
             rvMovies.setVisibility(View.VISIBLE);
@@ -183,7 +205,6 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
             rvMovies.setAdapter(mrvAdapter);
             changeTypeSortText();
         }
-
         return view;
     }
 
@@ -247,6 +268,7 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         if (view.getId()==R.id.fab){
             animateFAB();
         }else if(view.getId()==R.id.fabFavorite){
+            idTypeSort = view.getId();
             loadFavorites();
         }else {
             idTypeSort = view.getId();
@@ -285,8 +307,8 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
 
     private void loadFavorites() {
         listMovies.clear();
-        listMovies=getFavoritesMovies();
-        if (listMovies!=null && listMovies.size()!=0){
+        //listMovies=getFavoritesMovies();
+       /* if (listMovies!=null && listMovies.size()!=0){
             tvType.setVisibility(View.VISIBLE);
             rvMovies.setVisibility(View.VISIBLE);
             swipeContainer.setRefreshing(false);
@@ -301,11 +323,32 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
             llMessage.setVisibility(View.VISIBLE);
             tvMessage.setText(getString(R.string.lb_popular));
             btReload.setVisibility(View.GONE);
+        }*/
+        tvType.setVisibility(View.VISIBLE);
+        tvType.setText(getString(R.string.lb_favorite));
+        swipeContainer.setRefreshing(false);
+        tvType.setVisibility(View.VISIBLE);
+        rvMovies.setVisibility(View.VISIBLE);
+        llMessage.setVisibility(View.GONE);
+        btReload.setVisibility(View.GONE);
+
+        if (getBoolean(R.bool.isTablet)){
+            rvMovies.setLayoutManager(new GridLayoutManager(getContext(), getNumberRowsTabletOrientation()));
+        }else {
+            rvMovies.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
         }
+
+        // Initialize the adapter and attach it to the RecyclerView
+        //mAdapter = new CursorMovieRecyclerViewAdapter(getActivity(),mCallbacks);
+        rvMovies.setAdapter(mAdapter);
+        getActivity().getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+
     }
 
     public interface Callbacks {
         void onItemSelected(ArrayList<Movie> list,int position,View view);
+
+        void onFavoriteSelected(Cursor tag, int adapterPosition, View viewById);
     }
 
 
@@ -320,4 +363,69 @@ public class ListMoviesFragment extends BaseFragment implements Callback<ListMov
         outState.putInt(ARG_TYPE_FILTER,idTypeSort);
         super.onSaveInstanceState(outState);
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // re-queries for all tasks
+        if (idTypeSort==R.id.fabFavorite) {
+            mAdapter = new CursorMovieRecyclerViewAdapter(getActivity(),mCallbacks);
+            rvMovies.setAdapter(mAdapter);
+            getActivity().getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+        }
+    }
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Cursor>(getActivity()) {
+
+            // Initialize a Cursor, this will hold all the task data
+            Cursor mTaskData = null;
+
+            // onStartLoading() is called when a loader first starts loading data
+            @Override
+            protected void onStartLoading() {
+                if (mTaskData != null) {
+                    // Delivers any previously loaded data immediately
+                    deliverResult(mTaskData);
+                } else {
+                    // Force a new load
+                    forceLoad();
+                }
+            }
+
+            // loadInBackground() performs asynchronous loading of data
+            @Override
+            public Cursor loadInBackground() {
+                try {
+                    return getActivity().getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                            null,
+                            null,
+                            null,
+                            null);
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to asynchronously load data.");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            // deliverResult sends the result of the load, a Cursor, to the registered listener
+            public void deliverResult(Cursor data) {
+                mTaskData = data;
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
+    }
+
 }
