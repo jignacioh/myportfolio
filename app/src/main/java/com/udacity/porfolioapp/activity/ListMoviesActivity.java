@@ -2,10 +2,14 @@ package com.udacity.porfolioapp.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +24,7 @@ import com.udacity.porfolioapp.fragment.ReviewsMovieFragment;
 import com.udacity.porfolioapp.model.Movie;
 import com.udacity.porfolioapp.model.Review;
 import com.udacity.porfolioapp.model.Trailer;
+import com.udacity.porfolioapp.model.provider.MovieContentProvider;
 
 import java.util.ArrayList;
 
@@ -28,14 +33,18 @@ import butterknife.ButterKnife;
 /**
  * Created by Juan PC
  */
-public class ListMoviesActivity extends BaseActivity implements ListMoviesFragment.Callbacks,DetailsMovieFragment.Callbacks,ReviewsMovieFragment.Callbacks{
+public class ListMoviesActivity extends BaseActivity implements
+        ListMoviesFragment.Callbacks,
+        DetailsMovieFragment.Callbacks,
+        ReviewsMovieFragment.Callbacks,
+        LoaderManager.LoaderCallbacks<Cursor>{
 
     private boolean mTwoPane=false;
     public static final String ARG_FRAG_LIST="ListMovieFragment";
     public static final String ARG_MOVIE_SELECTED="movieSelected";
     private FrameLayout frameLayoutMainView,frameLayoutDetailContainer;
     private Movie movieSelected;
-
+    SimpleCursorAdapter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +93,6 @@ public class ListMoviesActivity extends BaseActivity implements ListMoviesFragme
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            // close this activity and return to preview activity (if there is any)
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -108,6 +116,8 @@ public class ListMoviesActivity extends BaseActivity implements ListMoviesFragme
                 Intent intentD = new Intent(this, ItemMovieActivity.class);
                 Pair<View, String> pair1 = Pair.create(view, view.getTransitionName());
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, view.getTransitionName());
+                Uri todoUri = Uri.parse(MovieContentProvider.CONTENT_URI + "/" + position);
+                intentD.putExtra(MovieContentProvider.CONTENT_ITEM_TYPE, todoUri);
                 intentD.putExtra(HomeMovieFragment.ARG_ITEM_MOVIE,list.get(position));
                 startActivity(intentD, options.toBundle());
             }
@@ -150,5 +160,23 @@ public class ListMoviesActivity extends BaseActivity implements ListMoviesFragme
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(ARG_MOVIE_SELECTED,movieSelected);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = { TodoTable.COLUMN_ID, TodoTable.COLUMN_SUMMARY };
+        CursorLoader cursorLoader = new CursorLoader(this,
+                MyTodoContentProvider.CONTENT_URI, projection, null, null, null);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
