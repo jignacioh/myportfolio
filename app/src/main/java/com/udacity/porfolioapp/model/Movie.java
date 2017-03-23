@@ -2,6 +2,7 @@ package com.udacity.porfolioapp.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.BaseColumns;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -23,6 +24,7 @@ import java.util.List;
 @Entity
 public class Movie  implements Parcelable   {
 
+    public static final String ROW_ID="id";
     public static final String ROW_POSTER="POSTER";
     public static final String ROW_TITLE="TITLE";
     public static final String ROW_DATE="DATE";
@@ -31,11 +33,12 @@ public class Movie  implements Parcelable   {
     public static final String ROW_OVERVIEW="OVERVIEW";
     public static final String ROW_VOTE="VOTE";
     public static final String ROW_AVERAGE="AVERAGE";
+    public static final String TABLE_NAME = "movie";
 
 
     @Id
     @SerializedName("id")
-    private Long id;
+    public Long id;
 
     @Property(nameInDb = ROW_POSTER)
     @SerializedName("poster_path")
@@ -83,6 +86,20 @@ public class Movie  implements Parcelable   {
         this.yearMovie = yearMovie;
         this.descriptionMovie = descriptionMovie;
         this.listTrailerMovie = listTrailerMovie;
+    }
+
+    public static final class MovieEntry implements BaseColumns{
+        public static final String COLUMN_ID="id";
+        public static final String COLUMN_POSTER="POSTER";
+        public static final String COLUMN_TITLE="TITLE";
+        public static final String COLUMN_DATE="DATE";
+        public static final String COLUMN_POPULAR="POPULAR";
+        public static final String COLUMN_BACKDROP="BACKDROP";
+        public static final String COLUMN_OVERVIEW="OVERVIEW";
+        public static final String COLUMN_VOTE="VOTE";
+        public static final String COLUMN_AVERAGE="AVERAGE";
+
+
     }
 
     public Long getId() {
@@ -295,6 +312,9 @@ public class Movie  implements Parcelable   {
     /** Used for active entity operations. */
     @Generated(hash = 1042217376)
     private transient MovieDao myDao;
+
+
+
 
 
 }

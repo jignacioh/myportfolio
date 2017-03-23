@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.udacity.porfolioapp.model.Movie;
 import com.udacity.porfolioapp.model.StoreMovieDbHelper;
 
 import java.util.Arrays;
@@ -24,30 +25,30 @@ public class MovieContentProvider extends ContentProvider {
     private StoreMovieDbHelper database;
 
     // used for the UriMacher
-    private static final int TODOS = 10;
-    private static final int TODO_ID = 20;
+    private static final int MOVIES = 10;
+    private static final int MOVIE_ID = 20;
 
-    private static final String AUTHORITY = "com.udacity.porfolioapp.contentprovider";
+    private static final String AUTHORITY = "com.udacity.porfolioapp.model.provider";
 
-    private static final String BASE_PATH = "todos";
+    private static final String BASE_PATH = "storemovie";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
             + "/" + BASE_PATH);
 
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
-            + "/todos";
+            + "/movies";
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
-            + "/todo";
+            + "/movie";
 
     private static final UriMatcher sURIMatcher = new UriMatcher(
             UriMatcher.NO_MATCH);
     static {
-        sURIMatcher.addURI(AUTHORITY, BASE_PATH, TODOS);
-        sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", TODO_ID);
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH, MOVIES);
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", MOVIE_ID);
     }
 
     @Override
     public boolean onCreate() {
-        database = new TodoDatabaseHelper(getContext());
+        database = new StoreMovieDbHelper(getContext());
         return false;
     }
 
@@ -62,15 +63,15 @@ public class MovieContentProvider extends ContentProvider {
         checkColumns(projection);
 
         // Set the table
-        queryBuilder.setTables(TodoTable.TABLE_TODO);
+        queryBuilder.setTables(Movie.TABLE_NAME);
 
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
-            case TODOS:
+            case MOVIES:
                 break;
-            case TODO_ID:
+            case MOVIE_ID:
                 // adding the ID to the original query
-                queryBuilder.appendWhere(TodoTable.COLUMN_ID + "="
+                queryBuilder.appendWhere(Movie.MovieEntry.COLUMN_ID + "="
                         + uri.getLastPathSegment());
                 break;
             default:
@@ -97,8 +98,8 @@ public class MovieContentProvider extends ContentProvider {
         SQLiteDatabase sqlDB = database.getWritableDatabase();
         long id = 0;
         switch (uriType) {
-            case TODOS:
-                id = sqlDB.insert(TodoTable.TABLE_TODO, null, values);
+            case MOVIES:
+                id = sqlDB.insert(Movie.TABLE_NAME, null, values);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -113,21 +114,21 @@ public class MovieContentProvider extends ContentProvider {
         SQLiteDatabase sqlDB = database.getWritableDatabase();
         int rowsDeleted = 0;
         switch (uriType) {
-            case TODOS:
-                rowsDeleted = sqlDB.delete(TodoTable.TABLE_TODO, selection,
+            case MOVIES:
+                rowsDeleted = sqlDB.delete(Movie.TABLE_NAME, selection,
                         selectionArgs);
                 break;
-            case TODO_ID:
+            case MOVIE_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
                     rowsDeleted = sqlDB.delete(
-                            TodoTable.TABLE_TODO,
-                            TodoTable.COLUMN_ID + "=" + id,
+                            Movie.TABLE_NAME,
+                            Movie.MovieEntry.COLUMN_ID + "=" + id,
                             null);
                 } else {
                     rowsDeleted = sqlDB.delete(
-                            TodoTable.TABLE_TODO,
-                            TodoTable.COLUMN_ID + "=" + id
+                            Movie.TABLE_NAME,
+                            Movie.MovieEntry.COLUMN_ID + "=" + id
                                     + " and " + selection,
                             selectionArgs);
                 }
@@ -147,23 +148,23 @@ public class MovieContentProvider extends ContentProvider {
         SQLiteDatabase sqlDB = database.getWritableDatabase();
         int rowsUpdated = 0;
         switch (uriType) {
-            case TODOS:
-                rowsUpdated = sqlDB.update(TodoTable.TABLE_TODO,
+            case MOVIES:
+                rowsUpdated = sqlDB.update(Movie.TABLE_NAME,
                         values,
                         selection,
                         selectionArgs);
                 break;
-            case TODO_ID:
+            case MOVIE_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
-                    rowsUpdated = sqlDB.update(TodoTable.TABLE_TODO,
+                    rowsUpdated = sqlDB.update(Movie.TABLE_NAME,
                             values,
-                            TodoTable.COLUMN_ID + "=" + id,
+                            Movie.MovieEntry.COLUMN_ID + "=" + id,
                             null);
                 } else {
-                    rowsUpdated = sqlDB.update(TodoTable.TABLE_TODO,
+                    rowsUpdated = sqlDB.update(Movie.TABLE_NAME,
                             values,
-                            TodoTable.COLUMN_ID + "=" + id
+                            Movie.MovieEntry.COLUMN_ID  + "=" + id
                                     + " and "
                                     + selection,
                             selectionArgs);
@@ -177,9 +178,16 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     private void checkColumns(String[] projection) {
-        String[] available = { TodoTable.COLUMN_CATEGORY,
-                TodoTable.COLUMN_SUMMARY, TodoTable.COLUMN_DESCRIPTION,
-                TodoTable.COLUMN_ID };
+        String[] available = {
+                Movie.MovieEntry.COLUMN_AVERAGE,
+                Movie.MovieEntry.COLUMN_BACKDROP,
+                Movie.MovieEntry.COLUMN_DATE,
+                Movie.MovieEntry.COLUMN_OVERVIEW,
+                Movie.MovieEntry.COLUMN_POPULAR,
+                Movie.MovieEntry.COLUMN_POSTER,
+                Movie.MovieEntry.COLUMN_TITLE,
+                Movie.MovieEntry.COLUMN_VOTE,
+                Movie.MovieEntry.COLUMN_ID };
         if (projection != null) {
             HashSet<String> requestedColumns = new HashSet<String>(
                     Arrays.asList(projection));

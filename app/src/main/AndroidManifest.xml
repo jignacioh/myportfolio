@@ -23,6 +23,10 @@
             android:name=".activity.ItemMovieActivity"
             android:configChanges="screenSize"
             android:label="@string/title_activity_item_movie"></activity>
+        <provider
+            android:name=".model.provider.MovieContentProvider"
+            android:authorities="com.udacity.porfolioapp.model.provider" >
+        </provider>
     </application>
 
 </manifest>
