@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1069781903227",
+    "firebase_url": "https://poppapsmovies.firebaseio.com",
+    "project_id": "poppapsmovies",
+    "storage_bucket": "poppapsmovies.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069781903227:android:d84452b69b69a51a",
+        "android_client_info": {
+          "package_name": "com.udacity.porfolioapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1069781903227-nve19mm3q27sas2sj8keikpsa9l66hh8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udacity.porfolioapp",
+            "certificate_hash": "7fe1188cc0b7c717dd0ac8524e341ccda51b24cf"
+          }
+        },
+        {
+          "client_id": "1069781903227-sadb2s258pfd2fgvfdl5sg3dsv37mfhe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVbN66rSRvfQtl-4z6clRRfZ5MT1fDNWY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1069781903227-sadb2s258pfd2fgvfdl5sg3dsv37mfhe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
